@@ -27,23 +27,30 @@ function write_gene_tag(i) {
 }
 
 
-function get_genomic_landscape(start, end, d) {
+function get_genomic_landscape(t, d,  i) {
 	# The env variable 'd' tells the function where 
 	# to begin to read the gene dictionary
 
 	# As long as the terminator is located after a gene end
 	# Get the next gene.
-	while(start > gene_end[d] && gene_end[d]) {
+	while(it_start[t] > gene_end[d] && gene_end[d]) {
 		d++;
 	}
+	af_it = it_start[t+1];
+	bf_it = it_end[t-1];
 
 	# idx of first gene before IT
 	bf = d - 1;
 	bf_strand = gene_strand[bf];
+	# previous IT on same strand
+	bf_it = t-1; 
+	while(it_strand[bf_it] && it_strand[bf_it] != bf_strand) { bf_it--; }
+	if(!it_strand[bf_it]) { it_end[bf_it] = 0; }
+	#print it_strand[bf_it]
 	# Counter for nb of gene(s) before IT on same strand
 	nb_bf = 1;
 	# Get info on these series of genes
-	while(gene_strand[bf] == bf_strand) {
+	while(gene_strand[bf] == bf_strand && gene_start[bf] > it_end[bf_it]) {
 		bf_series[nb_bf] = write_gene_tag(bf);
 		nb_bf++;
 		bf--;
@@ -54,17 +61,21 @@ function get_genomic_landscape(start, end, d) {
 		bf_series_tag = bf_series_tag "|" bf_series[i];
 	}
 	# Get gene tag of gene breaking the series
-	bf_break = write_gene_tag(bf);
+	if(gene_start[bf] <= it_end[bf_it]) {
+		bf_break = "cause=IT;start=" it_start[bf_it] ";end=" it_end[bf_it]; 
+	} else {
+		bf_break = "cause=Opposite_gene;" write_gene_tag(bf);
+	}
 	delete bf_series;
 
 	# Apply the same method for after series
 	af = d;
-	while(gene_start[af] < end) {
-		af++;
-	}
 	af_strand = gene_strand[af];
+	af_it = t+1; 
+	while(it_strand[af_it] && it_strand[af_it] != af_strand) { af_it++; }
+	if(!it_strand[af_it]) { it_start[af_it] = 10^9; }
 	nb_af = 1;
-	while(gene_strand[af] == af_strand) {
+	while(gene_strand[af] == af_strand && gene_end[af] < it_start[af_it]) {
 		af_series[nb_af] = write_gene_tag(af);
 		nb_af++;
 		af++;
@@ -73,7 +84,11 @@ function get_genomic_landscape(start, end, d) {
 	for(i = 2; i < nb_af; i++) {
 		af_series_tag = af_series_tag "|" af_series[i];
 	}
-	af_break = write_gene_tag(af);
+	if(gene_end[af] >= it_start[af_it]) {
+		af_break = "cause=IT;start=" it_start[af_it] ";end=" it_end[af_it]; 
+	} else {
+		af_break = "cause=Gene;" write_gene_tag(af);
+	}
 	delete af_series;
 
 	genomic_landscape = bf_strand \
@@ -130,11 +145,11 @@ file_idx == 2 && FNR == 1 {
 			"\tStrand First Gene BEFORE IT" \
 			"\tLength BEFORE series" \
 			"\tSeries of Gene(s) BEFORE IT on Same Strand" \
-			"\tGene on Opp. Strand Breaking BEFORE Series" \
+			"\tFeature Breaking BEFORE Series" \
 			"\tStrand First Gene AFTER IT" \
 			"\tLength AFTER series" \
 			"\tSeries of Gene(s) AFTER IT on Same Strand" \
-			"\tGene on Opp. Strand Breaking AFTER Series"; 
+			"\tFeature Breaking AFTER Series"; 
 	} else {
 		header = $0;
 	}
@@ -142,23 +157,24 @@ file_idx == 2 && FNR == 1 {
 
 # Only IT with no genomic landscape assigned will be annotated
 file_idx == 2 && FNR > 1 && NF == 6 {
-	prefix = $0;
-	start = $1;
-	end = $2;
-	# The fct get_genomic_landscape will increment the dictionary index 'd'
-	suffix = get_genomic_landscape(start, end, d);
-	#print gene_start[0]
-	line[t] = prefix "\t" suffix;
+	prefix[t] = $0;
+	it_start[t] = $1;
+	it_end[t] = $2;
+	it_strand[t] = $3;
 	t++;
 }
 
-file_idx == 3 && FNR > 1 && NF >= 12 {
+file_idx == 3 && FNR > 1 && NF > 6 {
 	line[t] = $0; t++;
 }
 
 END {
 	printf("%s\n", header);
 	for(i = 0; i < t; i++) {
-		printf("%s\n", line[i]);
+		# The fct get_genomic_landscape will increment 
+		# the dictionary index 'd'
+		suffix = get_genomic_landscape(i, d);
+		line = prefix[i] "\t" suffix;
+		printf("%s\n", line);
 	}
 }
