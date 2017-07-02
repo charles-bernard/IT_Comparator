@@ -46,7 +46,6 @@ function get_genomic_landscape(t, d,  i) {
 	bf_it = t-1; 
 	while(it_strand[bf_it] && it_strand[bf_it] != bf_strand) { bf_it--; }
 	if(!it_strand[bf_it]) { it_end[bf_it] = 0; }
-	#print it_strand[bf_it]
 	# Counter for nb of gene(s) before IT on same strand
 	nb_bf = 1;
 	# Get info on these series of genes
@@ -60,7 +59,7 @@ function get_genomic_landscape(t, d,  i) {
 	for(i = nb_bf-2; i >= 1; i--) {
 		bf_series_tag = bf_series_tag "|" bf_series[i];
 	}
-	# Get gene tag of gene breaking the series
+	# Get tag of feature breaking the series
 	if(gene_start[bf] <= it_end[bf_it]) {
 		bf_break = "cause=IT;start=" it_start[bf_it] ";end=" it_end[bf_it]; 
 	} else {
