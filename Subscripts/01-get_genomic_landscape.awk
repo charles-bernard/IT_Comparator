@@ -36,66 +36,69 @@ function get_genomic_landscape(t, d,  i) {
 	while(it_start[t] > gene_end[d] && gene_end[d]) {
 		d++;
 	}
-	af_it = it_start[t+1];
-	bf_it = it_end[t-1];
 
 	# idx of first gene before IT
-	bf = d - 1;
-	bf_strand = gene_strand[bf];
+	g_bf = d - 1;
+	g_bf_strand = gene_strand[g_bf];
+
 	# previous IT on same strand
-	bf_it = t-1; 
-	while(it_strand[bf_it] && it_strand[bf_it] != bf_strand) { bf_it--; }
-	if(!it_strand[bf_it]) { it_end[bf_it] = 0; }
+	it_bf = t-1; 
+	while(it_strand[it_bf] && it_strand[it_bf] != g_bf_strand) { it_bf--; }
+	if(!it_strand[it_bf]) { it_end[it_bf] = 0; }
+
 	# Counter for nb of gene(s) before IT on same strand
-	nb_bf = 1;
+	nb_g_bf = 1;
 	# Get info on these series of genes
-	while(gene_strand[bf] == bf_strand && gene_start[bf] > it_end[bf_it]) {
-		bf_series[nb_bf] = write_gene_tag(bf);
-		nb_bf++;
-		bf--;
+	while(gene_strand[g_bf] == bf_strand && gene_start[g_bf] > it_end[it_bf]) {
+		bf_series[nb_g_bf] = write_gene_tag(g_bf);
+		nb_g_bf++;
+		g_bf--;
 	}
 	# Concatenate these info into a tag
-	bf_series_tag = bf_series[nb_bf-1];
-	for(i = nb_bf-2; i >= 1; i--) {
+	bf_series_tag = bf_series[nb_g_bf-1];
+	for(i = nb_g_bf-2; i >= 1; i--) {
 		bf_series_tag = bf_series_tag "|" bf_series[i];
 	}
+
 	# Get tag of feature breaking the series
-	if(gene_start[bf] <= it_end[bf_it]) {
-		bf_break = "cause=IT;start=" it_start[bf_it] ";end=" it_end[bf_it]; 
+	if(gene_start[g_bf] <= it_end[it_bf]) {
+		bf_break = "cause=IT;start=" it_start[it_bf] ";end=" it_end[it_bf]; 
 	} else {
-		bf_break = "cause=Opposite_gene;" write_gene_tag(bf);
+		bf_break = "cause=Opposite_gene;" write_gene_tag(g_bf);
 	}
 	delete bf_series;
 
 	# Apply the same method for after series
-	af = d;
-	af_strand = gene_strand[af];
-	af_it = t+1; 
-	while(it_strand[af_it] && it_strand[af_it] != af_strand) { af_it++; }
-	if(!it_strand[af_it]) { it_start[af_it] = 10^9; }
-	nb_af = 1;
-	while(gene_strand[af] == af_strand && gene_end[af] < it_start[af_it]) {
-		af_series[nb_af] = write_gene_tag(af);
-		nb_af++;
-		af++;
+	g_af = d;
+	g_af_strand = gene_strand[g_af];
+	
+	it_af = t+1; 
+	while(it_strand[it_af] && it_strand[it_af] != af_strand) { it_af++; }
+	if(!it_strand[it_af]) { it_start[it_af] = 10^9; }
+
+	nb_g_af = 1;
+	while(gene_strand[g_af] == af_strand && gene_end[g_af] < it_start[it_af]) {
+		af_series[nb_g_af] = write_gene_tag(g_af);
+		nb_g_af++;
+		g_af++;
 	}
 	af_series_tag = af_series[1];
-	for(i = 2; i < nb_af; i++) {
+	for(i = 2; i < nb_g_af; i++) {
 		af_series_tag = af_series_tag "|" af_series[i];
 	}
-	if(gene_end[af] >= it_start[af_it]) {
-		af_break = "cause=IT;start=" it_start[af_it] ";end=" it_end[af_it]; 
+	if(gene_end[g_af] >= it_start[it_af]) {
+		af_break = "cause=IT;start=" it_start[it_af] ";end=" it_end[it_af]; 
 	} else {
-		af_break = "cause=Gene;" write_gene_tag(af);
+		af_break = "cause=Gene;" write_gene_tag(g_af);
 	}
 	delete af_series;
 
 	genomic_landscape = bf_strand \
-		"\t" nb_bf-1 \
+		"\t" nb_g_bf-1 \
 		"\t" bf_series_tag \
 		"\t" bf_break \
 		"\t" af_strand \
-		"\t" nb_af-1 \
+		"\t" nb_g_af-1 \
 		"\t" af_series_tag \
 		"\t" af_break;
 
