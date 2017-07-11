@@ -1,0 +1,322 @@
+# Copies and Copyright-Notice
+#
+#      RegulonDB is free for academic/noncommercial use
+#
+#      User is not entitled to change or erase data sets of the RegulonDB
+#      database or to eliminate copyright notices from RegulonDB. Furthermore,
+#      User is not entitled to expand RegulonDB or to integrate RegulonDB partly
+#      or as a whole into other databank systems, without prior written consent
+#      from CCG-UNAM.
+#
+#      Please check the license at http://regulondb.ccg.unam.mx/menu/download/full_version/terms_and_conditions.jsp
+#
+# Citation
+#
+#      Gama-Castro S et al. (2016). "RegulonDB version 9.0: high-level integration of gene regulation, coexpression, motif clustering and beyond.",
+#      Nucleic Acids Res. 2016 Jan 4;44(D1):D133-43. doi: 10.1093/nar/gkv1156. Epub 2015 Nov 2.
+#
+#
+# Contact
+#
+#      Person: RegulonDB Team
+#      Web Page: http://regulondb.ccg.unam.mx/menu/about_regulondb/contact_us/index.jsp
+#          (regulondb@ccg.unam.mx)
+#
+#
+# Release: 9.4 Date: 05-08-2017
+# ___________________________________________________________________________
+# Columns:
+# (1) Terminator identifier assigned by RegulonDB
+# (2) Terminator left end position in the genome
+# (3) Terminator right end position in the genome
+# (4) DNA strand where the terminator is located
+# (5) Terminator sequence
+# (6) Transcription unit(s) related to the terminator   *see note1
+# (7) Terminator type
+# (8) Operon name
+# (9) References (PubMed ID)
+# (10) Evidence that supports the existence of the terminator 
+# (11) Evidence confidence level (Confirmed, Strong, Weak)
+# note1: If there are more than one TU with the same name, it is because the promoter associated to the TU is different
+ECK120033737	274	310	forward	ggaaacacagAAAAAAGCCCGCACCTGACAGTGCGGGCTTTTTTTTTcgaccaaagg	thrL	rho-independent	thrLABC	287010		
+ECK120015459	9199	9226	forward	taatcattctTAGCGTGACCGGGAAGTCGGTCACGCTAcctcttctga	talB	rho-independent	talB	7592346		
+ECK120016882	20771	20784	reverse	cataaaaaaaCCCGCTTGCGCGGGctttttcaca	rpsT,rpsT	rho-independent	rpsT	2429258		
+ECK120030671	27252	27279	forward	aagttatgcgAAAATGCCGGTCTTGTTACCGGCATTTTttatggagaa	ileS-lspA-fkpB-ispH,ileS-lspA-fkpB-ispH,ileS-lspA-fkpB-ispH,lspA-fkpB-ispH,ribF-ileS-lspA-fkpB-ispH	rho-independent	ribF-ileS-lspA-fkpB-ispH	2011499		
+ECK120030673	29248	29272	forward	tattgattatAAAGGGCTTTAATTTTTGGCCCTTTtatttttggt	dapB,dapB	rho-independent	dapB	6094578		
+ECK120010860	65800	65821	reverse	ccatcaaaaaACCAGGCTTGAGTATAGCCTGGtttcgtttga	araBAD	rho-independent	araBAD	3549454		
+ECK120034959	83574	83603	reverse	ttcgggcataAAAAAACCCGCGCAATGGCGCGGGTTTTTTgtttgactgc	leuL	rho-independent	leuLABCD	6171647		
+ECK120033739	107501	107544	forward	gtataaaattCGACTGGCAAATCTGGCACTCTCTCCGGCCAGGTGAACCAGTCGtttttttttg	lpxC	rho-independent	mraZ-rsmH-ftsLI-murEF-mraY-murD-ftsW-murGC-ddlB-ftsQAZ-lpxC	2824434		
+ECK120029528	120144	120168	reverse	aaagattattGCCCTCACCCTGTACGGGTGAGGGCgtagagagat	aroP,aroP	rho-independent	aroP	2408019		
+ECK120010814	127590	127619	forward	tgatgtaagtAAAAGAGCCGGCCCAACGGCCGGCTTTTTTctggtaatct	aceEF	rho-independent	pdhR-aceEF-lpd	9868788		
+ECK120015440	129366	129394	forward	tccggcaattAAAAAAGCGGCTAACCACGCCGCTTTTTTtacgtctgca	lpd,pdhR-aceEF-lpd	rho-independent	pdhR-aceEF-lpd	3897791		
+ECK125229304	134249	134272	forward	acgacacaatGCCCGGTGAATGAGATTCCCGGGCatttttttat	acnB	rho-independent	acnB	25092924		
+ECK120027917	134756	134783	reverse	agtaaataaaTCTGGCGGAGCCTGGGAGCTCCGCCAGAgccgttaaac	yacC-speED	rho-independent	yacC-speED	2666401		
+ECK120015446	138801	138816	reverse	tccggcatgaACAACGCGCACGTTGTcagcaatctg	gcd,gcd	rho-independent	gcd	8419307		
+ECK120030672	185090	185111	reverse	tgcaaaaaaaTCGGGCAGCGTCGTGCTGCCCGtgtgcatact	dapD	rho-independent	map-glnD-dapD	6094577		
+ECK125095454	191721	191738	forward	atcaaaaaggAGCCGCCTGAGGGCGGCTtctttttgtg	tff-rpsB-tsf	rho-independent	tff-rpsB-tsf	6272196		
+ECK125160654	193442	193498	forward	tcttgaacgaCAAAAACGCCGCTCAGTAGATCCTTGCGGATCGGCTGGCGGCGTTTTGCTTTTTATTctgtctcaac	frr	rho-independent	frr	1860827		
+ECK120023928	217020	217051	reverse	caatccatgtAAAAAAAGGGCCCTGAAATTCAGGACCCTTTCtggcatcagc	proS	rho-independent	proS	1688424		
+ECK120034551	256442	256474	forward	ctaatcttttCAACGCCTGGCACTGCCGGGCGTTGTTCTTTTTaacttcaggc	gpt	rho-independent	gpt	6397401		
+ECK120030220	360253	360278	forward	ttacccgcaaAGTGCGCTGCTGCTTAGCAGCGCACTgcttggtggg	cynTS	rho-independent	cynTSX	3049588		
+ECK120010789	361140	361179	reverse	gggtcaaagaGGCATGATGCGACGCTTGTTCCTGCGCTTTGTTCATGCCGgatgcggcta	lacYA,lacZYA,lacZYA,lacZYA,lacZYA	rho-independent	lacZYA	3901000		
+ECK120010788	361212	361236	both	gaacttgtagGCCTGATAAGCGCAGCGTATCAGGCaatttttata	cynTSX,lacYA,lacZYA,lacZYA,lacZYA,lacZYA	rho-independent	cynTSX,lacZYA	3049588		
+ECK120010809	424486	424508	forward	ccgtttaacaCGTTCTGGATGAAATCCATATCGcgatagcgca	malZ	rho-independent	malZ	1918057		
+ECK120010810	424530	424553	forward	cagccactgcTCTGACCACAAGTAATTGTTCAGAttgataaaac	malZ	rho-independent	malZ	1918057		
+ECK120010830	427756	427786	forward	gctgttcagaTCACTGGTGCGCGCGGAGTCGCCGCCAGTGAgcaaacgctg	tgt-yajC	rho-independent	tgt-yajC-secDF	7507921		
+ECK120010843	431096	431122	reverse	taacaatcagAAATGCCGGGAATAAATCCCGGCATTTtcataatcag	tsx,tsx	rho-independent	tsx	2265760		
+ECK125203452	453557	453576	reverse	ggcgtctacaGGCCCGGCTTGCACCGGGCCagagggcaga	yajG	rho-independent	yajG-ampG	8231804		
+ECK120014663	454844	454865	forward	gattttatgaAAAACGGCCTGCGGGCCGTTTTgttttgtctg	bolA,bolA	rho-independent	bolA	2684651		
+ECK120010850	458731	458755	forward	agttaaccaaAAAGGGGGGATTTTATCTCCCCTTTaatttttcct	clpPX,clpPX,clpPX	rho-independent	clpPX-lon	8226770		
+ECK120010820	461730	461742	forward	ctaagcgttgTCCCCAGTGGGGAtgtgacgaag	hupB,hupB,hupB,hupB	rho-independent	hupB	2187099		
+ECK120010821	461759	461778	forward	gaagttcaagGGCGCATCTACTGATGTGCCttttttattt	hupB,hupB,hupB,hupB	rho-independent	hupB	2187099		
+ECK120010826	474263	474301	forward	caagcactgcAAAAAACAGCCGGACGGTTTTCACCTCCGGCTATTTTTTtaattgtgat	glnK-amtB	rho-independent	glnK-amtB	8843440		
+ECK120010853	496998	497029	forward	ttcctgatgtAATGCCGGATGACCTTCGTGTCATCCGGCATTtttcttttca	htpG,htpG	rho-independent	htpG	3299380		
+ECK120010804	498945	498980	reverse	aaaaatatgaATATATTCCGGCGCTTAATGCCACGCCGGAACATATcgaaatgatg	aes	rho-independent	aes	9401025		
+ECK125095211	507260	507287	forward	ctctttgacgGGCCAATAGCGATATTGGCCATTTTTTTagcgcaacat	chiX	rho-independent	chiX	19426207		
+ECK120015460	603377	603409	forward	caaccatccgAAACCGCTCTCATCCATTCGATGAGAGCGGTTTttttaattac	pheP	rho-independent	pheP	1711024		
+ECK120048901	632046	632091	forward	ttagtgcccaGGGTTCCCTCTCACCCTAACCCTCTCCCCGGTGGGGCGAGGGGACTgaccgagcgc	cstA,cstA,cstA	rho-independent	cstA	1848300		
+ECK120015452	705939	705965	forward	caacaatgacAAGCGGTGGAGATCTTCTCTGCCGCTTtttttttcat	nagE	rho-independent	nagE	3284790		
+ECK120015454	707954	707978	forward	caaacaatccAAAACGCCGCGTTCAGCGGCGTTTTttctgctttt	glnS,glnS	rho-independent	glnS	6086662		
+ECK120010866	710118	710134	reverse	aacaaataagTGAGAGCTGTAACTCTCgcttttctta	fldA-uof-fur,fur,fur,uof-fur	rho-independent	fldA-uof-fur	2993806		
+ECK120011170	710162	710180	reverse	tgcataaaaaAGCCAACCCGCAGGTTGGCttttctcgtt	fldA-uof-fur,fur,fur,uof-fur	rho-independent	fldA-uof-fur			
+ECK120015444	715211	715242	forward	acatttaataAAAAAAGGGCGGTCGCAAGATCGCCCTTTTTTacgtatgaca	seqA-pgm	rho-independent	seqA-pgm	8083177		
+ECK120015442	758444	758450	forward	tcgcatcaggCAACCAGtgccggatgc	sdhDAB	rho-dependent	sdhCDAB-sucABCD	3897791		
+ECK120015441	762959	762966	forward	aagcgatacgAAATATTCggtctacggt	sucAB	rho-dependent	sdhCDAB-sucABCD	3897791		
+ECK120029599	786795	786821	forward	tagcaacaaaAAAGCCGACTCACTTGCAGTCGGCTTTctcattttaa	aroG	rho-independent	aroG	1970563 6125934		
+ECK125165957	787763	787768	reverse	atttgaacaaTATGAGataaagccct	galETKM	rho-dependent	galETKM	18374359		
+ECK125165956	788615	788741	reverse	ttggcataacGACCAATAGAGGCCCCCAGAAACGCGGCCTGATCCTGATAGCATTCCGGGCTGGCACAGCCGAGCAGCGCCTCGCGGACGCTGCCATCGGAAAGCGGAATACGGGCGGAAAGTAAAGTCGCACCCCAgtccatcagc	galETK	rho-dependent	galETKM	18374359		
+ECK125165954	789840	789918	reverse	ataatcaatcGCGCAGGGCAGAACGAAACCGTCGTTGTAGTCGGTGTGTTCACCAATCAAATTCACGCGGCCAGGCGCCTGAATGGTGTgagtggcagg	galET	rho-dependent	galETKM	18374359		
+ECK125165955	789952	789977	reverse	ttggcaaacaGAGATTGTGTTTTTTCTTTCAGACTCatttcttaca	galET	rho-dependent	galETKM	18374359		
+ECK125165953	790312	790425	reverse	cgtaaaacgtGGGCTTTGGGCAGCAGTAGCGTTTCGAACGGCCAGGCAGCCCAGTAAGGCACGACGGCTAACCAGTGTTCGGTTTCGACAACGGTACGGCTACCGTCTGCCAGCTCGCGCTGAAcataatccac	galE	rho-dependent	galETKM	18374359		
+ECK125165952	790823	790962	reverse	aagtcccggtGTAATCGGGGTTTTTATCGCCTGTCACCCGCACATTACCTGCGCAGAGGAAGCAATCTGGATCGTGCGCAGGTAACACCTGTTTGGCTGGCGTTTCCTGCGCCCCCTGCCAGGGGCGCTTAGCGCGGTGCGGTGAAACCAgaatccattg	galE	rho-dependent	galETKM	18374359		
+ECK120034957	850982	851009	forward	tggtgatataAAAAATCCGCCTCTCGGGGCGGATTTTTgtttttaagg	ompX,ompX	rho-independent	ompX	7836315		
+ECK120010817	884910	884938	forward	gggtaaaaaaATGCCTGACTGCTTTGTGCGATCAGGCATtctcgaatta	mdfA,mdfA	rho-independent	mdfA	8655497		
+ECK120015462	899648	899665	reverse	agcaataaaaAAGCCGCATGTGCGGCTTcagattgctg	artJ	rho-dependent	artJ	8801422		
+ECK120015461	900695	900725	reverse	tgaaataaaaAAGACGGACAACTTAGTGGGTTGTCCGTCTTcattataaga	artPIQM,artPIQM,artPIQM,artPIQM	rho-dependent	artPIQM	8801422		
+ECK120016586	926162	926186	reverse	tcacaaaataAAAAGGCCGGTTAAACCGACCTTTTactcgttctt	infA,infA	rho-independent	infA	1909328		
+ECK125199583	950301	950330	reverse	gcggaataaaAAAGCGGCAACTCAATAAAGTTGCCGCTTTacggggaaat	pflA	rho-independent	pflA	2192229		
+ECK120010857	951207	951266	reverse	tcgcgctaaaAAAGGCCCCACTTTCGTGGAGCCTTTATTGTACGCTTTTTACTGTACGATTTCAGTCAAAtctaattaca	focA-pflB,focA-pflB,focA-pflB,pflB,pflB,pflB,pflB,pflB	rho-independent	focA-pflB	2651404		
+ECK125145776	1015900	1015924	forward	tctttaaaaaGAAACCTCCGCATTGCGGAGGTTTCgccttttgat	rmf	rho-independent	rmf	15743942		
+ECK120010842	1037608	1037634	forward	ccgacgtaaaAAGACGGTAAGTATCGCTTTCAGTCTTatgaatatcg	hyaABCDEF	rho-independent	hyaABCDEF	2180913		
+ECK120015445	1066833	1066857	forward	ataacagaaaACTCCCCCGCGAGAAGCGGGGGAGTcgctggttaa	agp	rho-independent	agp	2153660		
+ECK120010862	1080794	1080838	forward	gctccgccgtCACGGTTGCAGGAAAGCTAAGGGACTTAGCCTGCGGCGGTTTTGTttggcttcag	putP,putP,putP,putP,putP	rho-independent	putP	3302614		
+ECK120010829	1086071	1086095	forward	gttatcggtgCAGAGCCCGGGCGAACCGGGCTTTGttttgggtgt	phoH,phoH	rho-independent	phoH	8444794		
+ECK120010783	1113532	1113560	forward	acgagccaatAAAAATACCGGCGTTATGCCGGTATTTTTttacgaaaga	opgGH,opgGH	rho-independent	opgGH	7934824		
+ECK120030800	1146728	1146752	forward	aattattggcAAAAGGCAACCACAGGCTGCCTTTTtctttgactc	sraB	rho-independent	sraB	11448770		
+ECK125162186	1151860	1151887	forward	aagtgaacatCTCCAGGCGGTCGTTCGACCGCCTGAGTtttatctttt	acpP	rho-independent	yceD-rpmF-plsX-fabHDG-acpP-fabF	1556094		
+ECK120010782	1159325	1159346	reverse	tggggagactAAGGCAGCCAGATGGCTGCCTTttttacaggt	fhuE	rho-independent	fhuE	2162465		
+ECK120048898	1235677	1235698	forward	tttaaagagcAAACCCCTCAAACGAGGGGTTTtttgttgttt	fadR,fadR	rho-independent	fadR	2843809		
+ECK120010832	1260895	1260909	reverse	agacaaaaaaACCCGCCGCAGCGGGtctttgagcc	lolB-ispE-prs,prs	rho-independent	lolB-ispE-prs	3009477		
+ECK120030803	1269039	1269067	forward	cttgaaaaatAAAGTATTAGCGTTCTGCGTTAAGACTTTtttcatgggt	kdsA,ychQA-kdsA	rho-independent	ychQA-kdsA	3039295		
+ECK125158032	1292461	1292485	reverse	cggacaataaAAAATCCCGCCGCTGGCGGGATTTTaagcaagtgc	hns	rho-independent	hns	22843842		
+ECK120010792	1311815	1311846	forward	gtaagcagaaAGTCAAAAGCCTCCGACCGGAGGCTTTTGACTattactcaac	tonB	rho-independent	tonB	6310567		
+ECK125122041	1312261	1312300	reverse	aaaccgacttAAAAGGAAAATCACAGGCGCGATGCTACTATGATTTTCCTgaggagaaca	yciCB	rho-independent	yciCB	3058546		
+ECK125122040	1314668	1314698	reverse	attccgcacaAAAACGACCCCGTAATATACGGGGTCAATAAggacatggta	yciE,yciGFE	rho-independent	yciGFE	3058546		
+ECK125122039	1315785	1315815	reverse	ttctccagtgAAATCACTGCGAGCCATACGGCCCGCAGATGcaattatctt	yciG	rho-independent	yciGFE	3058546		
+ECK125122038	1316383	1316408	reverse	aaagaaagttAAAATGCCGCCAGCGGAACTGGCGGCtgtgggatta	trpLEDCBA	rho-independent	trpLEDCBA	3058546		
+ECK120033735	1322975	1322995	reverse	ttcaaaaaaaAGCCCGCTCATTAGGCGGGCTgggtatctga	trpL	rho-independent	trpLEDCBA	7038627		
+ECK120010828	1334845	1334874	forward	tgcgttatttTCGGCACCTTTTATGTAGCGAAGGTGCCGGaatatattct	cysB	rho-independent	cysB	3032952		
+ECK125160652	1338512	1338548	reverse	agtaacaactATTTGCTTGCCGGTTATTTTGCTTCCGGCAAGCAAATgaattacaca	ribA,ribA	rho-independent	ribA	8320220		
+ECK120010825	1346942	1346968	reverse	ggggaaataaACGGCCCATCCATGAGGAATGGGCCGTgaaaggagat	rnb,rnb	rho-independent	rnb	8932710		
+ECK120014414	1366818	1366913	reverse	gcgattaataGCCCAACGCAATAATGTCTGATGCGCTGCGCTTATCAGGCCTGCAAACGACGTATTGATTATGTATGCCGAATAAAGCATTCACGCCGCATCCGGCaagttgtatt	pspF,pspF,pspF	rho-independent	pspF	8606168		
+ECK120010787	1388267	1388301	forward	agtaagcgcgAATATGCCTGATGGTGCAACACCATCAGGCATATTaaattatgct	tyrR	rho-independent	ycjXF-tyrR	3001057		
+ECK125141472	1405662	1405693	forward	ctgcataaaaAAATAGAGTCTGTCGACATCCGCCAGACTCTAcagtacacac	abgR	rho-independent	abgR	22289118		
+ECK125108722	1409217	1409249	forward	aattgattcgTACGACGCCGACTTTGATGAGTCGGCTTTTTTTtgcctgttat	fnrS	rho-independent	fnrS	20075074		
+ECK125165416	1413702	1413724	forward	tagtaggagtGCCACCTTCCTTTTCAATAGTGGcggtaatttt	ralA	rho-independent	ralA	24748661		
+ECK120034434	1449037	1449063	forward	gctcataagtAAAAAACGGCACCTGGTGCCGTTTTTTtgtctgaaac	feaB,feaB	rho-independent	feaB	9109378		
+ECK125140846	1563276	1563301	reverse	aaatcacagtATTTAAGTGACAGTGTCACGTTAAATgaaaacccgc	dosCP	rho-independent	dosCP	9751644		
+ECK120010815	1568904	1568930	reverse	aagcacgaaaAAGGGAGCGATGAATTATCGCTCCCTTgtcttataac	gadBC,gadC,gadC,gadC	rho-independent	gadBC	10383761		
+ECK125108724	1622766	1622799	forward	ccctcacctaACCGGCCCCTTGTTACAGTTGTGTACAAGGGGCCtgatttttat	yneM	rho-independent	yneM	19889087		
+ECK125108723	1622817	1622874	reverse	tatgacggcgAAAAAAAACCGCCAGTAAACCGGCGGTGAATGCTTGCATGGATAGATTTGTGTTTTGCttttacgcta	mgrR	rho-independent	mgrR	19889087		
+ECK120030221	1645034	1645049	reverse	aaaaacaaaaACCCGCCGAAGCGGGTtaagtgcggg	relBE-hokD	rho-independent	relBE-hokD	2990907		
+ECK120010801	1671703	1671720	forward	cagtaatgctGGCGCGCCCCCTCGCGCCtgaaaattac	asr	rho-independent	asr	10094685		
+ECK125146694	1686705	1686725	reverse	gccatgtaaaAAAACCGCCCCGAAGGGCGGCtctgtttatt	fumA	rho-independent	fumAC	6328431		
+ECK120048897	1698136	1698163	reverse	accaggtataGCAGATAAAGAGAGGATTATTTCGCTGCaatgagccgg	malI	rho-independent	malI	2670898		
+ECK125160653	1733711	1733740	forward	tagagaaaggACTGACGGATGCCCGTTCGCATCCGTCAGTattgcaggac	lhr,rnt-lhr	rho-independent	rnt-lhr	7559321		
+ECK120029341	1789487	1789510	forward	tctgaatgcgTGCCCATTCCTGACGGAATGGGCAtttctgcgca	aroH,aroH	rho-independent	aroH	1677907		
+ECK120017009	1795216	1795239	reverse	agtgaaaagaAAAAAGGCCGCAGAGCGGCCTTTTtagttagatc	ihfA,pheMST-ihfA	rho-independent	thrS-infC-rpmI-rplT-pheMST-ihfA	2991205		
+ECK120021269	1799161	1799176	reverse	tacaaaaaaaGCCTCCACTGGGAGGCtttcaggcgc	pheM,rplT-pheM	rho-independent	thrS-infC-rpmI-rplT-pheMST-ihfA	6317865		
+ECK120021270	1799363	1799382	reverse	gaaacgaaaaGAGGGAGACTAGCTCCCTCTttcaactggc	infC-rpmI-rplT,rplT,rpmI-rplT	rho-independent	thrS-infC-rpmI-rplT-pheMST-ihfA	6317865		
+ECK120015453	1816258	1816282	forward	aaacacgtagGCCTGATAAGCGAAGCGCATCAGGCagttttgcgt	katE	rho-independent	katE	1987146		
+ECK120010855	1821865	1821886	reverse	aggccaaaaaAAACCGGCGCAATGGCCGGTTTccgttgttac	osmE	rho-independent	osmE	7565114		
+ECK120029600	1825057	1825126	reverse	ttgagaagagAAAAGAAAACCGCCGATCCTGTCCACCGCATTACTGCAAGGTAGTGGACAAGACCGGCGGTCTTAAGTTTtttggctgaa	spy	rho-independent	spy	9068658		
+ECK125108943	1844932	1844954	reverse	aaaaaatatcCAACGAATTTTCTTGATCCGCTGgatatttcag	selD-topB,ydjA-selD-topB	rho-independent	ydjA-selD-topB	2553698		
+ECK125108944	1844937	1844959	reverse	atatccaacgAATTTTCTTGATCCGCTGGATATttcagaatat	selD-topB	rho-independent	ydjA-selD-topB	2553698		
+ECK120051408	1888017	1888043	reverse	gtgggcgtcaAAAAAAACGCCGGATTAACCGGCGTCTgacgactgac	fadD-sroD	rho-independent	fadD-sroD	2681190		
+ECK120033127	1898307	1898331	forward	tacttcttacTCGCCCATCTGCAACGGATGGGCGAatttataccc	sdaA	rho-independent	sdaA	2504697		
+ECK120010854	1911652	1911679	reverse	gggcataaaaAAAGCGCGTCGATCAGGACGCGCTTTTTagtatttact	htpX	rho-independent	htpX	1826904		
+ECK120010803	1932085	1932105	reverse	gctacaaaaaTGCCCGATCCTCGATCGGGCAttttgacttt	eda,eda,eda,edd-eda	rho-independent	edd-eda	1624451		
+ECK120015526	1944219	1944248	reverse	gaacacatttGTCGGATGCGGCGCGAGCGCCTTATCCGACctacggttcg	ruvAB,ruvAB	rho-independent	ruvAB			
+ECK120015457	1944273	1944303	reverse	ctctggtagtCCTGGTAAGACGCGAACAGCGTCGCATCAGGcatattgcca	ruvAB,ruvAB	rho-independent	ruvAB	2842314		
+ECK120015439	1946815	1946854	reverse	tgcggagggaGTGGAAACGCCTCAGCCGGAACTGACCGAGGCGGTATAACttaacgcagt	nudB-yebC-ruvC,ruvC,yebC-ruvC	rho-independent	nudB-yebC-ruvC	1885548		
+ECK120015458	1948662	1948693	reverse	ccttcgctcaTCCCATTCACATAGTTATCTATGCTCATGGGAgttcactcag	aspS,aspS	rho-independent	aspS	1885548		
+ECK120010840	1958447	1958473	reverse	ggataaaaaaAGGCCCCTGTTGAAATTGCAGGGGCCTggtacgagca	yecM-cutC	rho-independent	yecM-cutC	7635807		
+ECK125165415	1961817	1961843	forward	tgagagtgaaGCCTGATCAGGGTTAGCCGATCAGGCTtttttattgc	argS	rho-independent	argS	2668891		
+ECK125109037	1980096	1980126	reverse	aatcacagttTCTTTTCGCGAGCATCCTGCTCGGCGAAAAGagttattgcc	otsA,otsBA,otsBA	rho-independent	otsBA	8045430		
+ECK120010833	1999541	1999571	reverse	acgcgtaaatAAAAAAGGCGCTAGTGAAAGCGCCCTTTTTTgtcattatgc	fliAZ-tcyJ,fliAZ-tcyJ,tcyJ	rho-independent	fliAZ-tcyJ	8550423		
+ECK120010837	2006111	2006165	forward	cgaataatccGATTACGGCTACGCTTCTAATGTTCCCCTTGAATGGAGTCGAAGAATGCGTAATCccacgctgtt	fliDST	rho-independent	fliDST	1527488		
+ECK120015448	2007642	2007674	forward	gaggtgatttAAATTCATCCCCGGCGGCAAGCCGGGGAGATTTcattacggca	amyA	rho-independent	amyA	1400215		
+ECK120030218	2033715	2033731	forward	tattttttggGCCGGCATGATGCCGGCttttttttat	rseX	rho-independent	rseX	16513633		
+ECK120035135	2081341	2081369	reverse	tgattatgcgAGCAGACTCGCACTCCTGCCAGTCTGCTGcaaaagaaag	dacD	rho-independent	dacD	8709849		
+ECK120033736	2090108	2090140	forward	aacgcatgagAAAGCCCCCGGAAGATCACCTTCCGGGGGCTTTtttattgcgc	hisL	rho-independent	hisLGDCBHAFI	360215		
+ECK120035138	2167162	2167200	forward	gaaccacctcCTTAGCCTGTGTAATCTCCCTTACACGGGCTTATTTTTTacgcgtaata	cyaR	rho-independent	cyaR	18978044		
+ECK125203450	2192993	2193034	reverse	gcggcaaaaaCTAATACACCGCATCAATGTAACATCTCTGCGGTGTATGAAGaataaccaga	mrp	rho-independent	mrp	2259334		
+ECK125203451	2196343	2196366	forward	atcccccttcAAGGCGCTGCATCGACAGCGCCTTttctttataa	metG,metG	rho-independent	metG	2259334		
+ECK120015450	2219660	2219682	reverse	ccggcctacaAAGGGCGCAAACGTCGCGCCCTTactaaagcat	bglX	rho-independent	bglX	8757730		
+ECK125203453	2282824	2282836	forward	ttgtaaaaaaCCCCGCTCCGGCGgggttttttg	rplY	rho-independent	rplY	25749694		
+ECK120010781	2311610	2311624	reverse	caatgaaaaaAGGGCCCGCAGGCCCtttgttcgat	ompC,ompC,ompC	rho-independent	ompC	6304064		
+ECK120015169	2356723	2356752	forward	ctcctttctgATGCCCGGTAAGCATGTGGTTACCGGGCATttttgcgtac	glpABC	rho-independent	glpABC	3286606		
+ECK120010844	2390005	2390023	reverse	ttcagaaaaaCCGCCGAGCATGTCGGCGGctttctgact	nuoABCEFGHIJKLMN,nuoABCEFGHIJKLMN,nuoMN	rho-independent	nuoABCEFGHIJKLMN	7690854		
+ECK120010845	2428030	2428048	reverse	ggttgcaaaaTTGCCCTGAAACAGGGCAAcagcggagtt	cvpA-purF-ubiX,cvpA-purF-ubiX,ubiX	rho-independent	cvpA-purF-ubiX	3040734		
+ECK125138143	2440283	2440310	reverse	caatgatgtgAAAAAGGGAACCATCAGGTTCCCTTTTGcgttagtgcc	fabB	rho-independent	fabB	3076376		
+ECK120015447	2508424	2508447	reverse	tttaaaagatTATCGGGAGAGTTACCTCCCGATAtaaaaggaag	glk,glk	rho-independent	glk	9023215		
+ECK120051402	2521334	2521358	reverse	caccaatgtaAAAAAGCGCCCTAAAGGCGCTTTTTtactatctgc	xapR,xapR	rho-independent	xapR	2201776		
+ECK120051401	2521489	2521515	reverse	ccaccaatgtAAAAAAGCGCCCTAAAGGCGCTTTTTTgctatctgcg	xapR,xapR	rho-independent	xapR	2201776		
+ECK120010867	2522698	2522720	reverse	tatcataaaaGCAGCTCTGAAGAGCAGAGCCGCgaatcctttt	xapAB	rho-independent	xapAB	7559336		
+ECK120048902	2533409	2533424	forward	gcgtaaaaaaGCACCTTTTTAGGTGCttttttgtgg	cysK,cysK	rho-independent	cysK	3290198		
+ECK120010797	2536363	2536380	forward	cagtgaaaaaTGGCGCCCATCGGCGCCAtttttttatg	crr,crr,ptsHI-crr,ptsHI-crr,ptsHI-crr,ptsHI-crr,ptsHI-crr	rho-independent	ptsHI-crr	2457575		
+ECK120010784	2597803	2597824	reverse	atcagaaaaaAGGGCCGGATGATTCCAGCCCTgtatttttac	bamC,dapA-bamC	rho-independent	dapA-bamC	1885529		
+ECK120029530	2630906	2630933	reverse	ttgaagataaAAAACCCTCTGTAGTAACAGAGGGTTTTgttcattcat	guaBA	rho-independent	guaBA	3894345		
+ECK120051407	2656506	2656530	reverse	cgcagccaacGCATCTGCGGCGTGAAGCATGACGCggaaattatt	hscBA-fdx-iscX	rho-independent	hscBA-fdx-iscX	1317854		
+ECK120010780	2684075	2684093	reverse	taacgtagaaAGGCTTCCCGAAGGAAGCCttgatgatca	glyA	rho-independent	glyA	6300791		
+ECK120051385	2691157	2691185	reverse	gttcagatacAACAAAGCCGGGAATTACCCGGCTTTGTTatggaataag	glmY,glmY	rho-independent	glmY	17854828		
+ECK120010779	2738912	2738940	both	ctgatgaaaaGGTGCCGGATGATGTGAATCATCCGGCACtggattatta	aroF-tyrA,pheLA	rho-independent	aroF-tyrA,pheLA	6396419		
+ECK120033738	2746209	2746241	reverse	gtgaataaaaCAACCGGACCCCATCGAGGAACGGAGTCCGGTGtcatattaaa	ffh	rho-independent	ffh	2478711		
+ECK120010786	2822670	2822687	reverse	aaaagcaaaaGGGCCGCAGATGCGACCCttgtgtatca	recA	rho-independent	recAX	12547390		
+ECK120015451	2842477	2842501	reverse	aaccatgaagGCCCGATAAGCGCAGCGCATCGGGCaatttagcat	hycABCDEFGHI	rho-independent	hycABCDEFGHI	7851435		
+ECK120010849	2854304	2854321	forward	atgaccttttGCACCGCTTTGCGGTGCTttcctggaag	hypABCDE,hypBCDE	rho-independent	hypABCDE-fhlA	1849603		
+ECK120010835	2873234	2873284	reverse	cgcaaataacCAGGAGATAAAACCGACCACGGCACCAGGCAGTGACCATGTGGTTTCTTCAtcctcagtaa	cysDNC	rho-independent	cysDNC	1316900		
+ECK120010796	2924166	2924191	reverse	aataaaaaaaGGGAGCACTGTATTCACAGCGCTCCCggttcgtttc	csrB	rho-independent	csrB	9211896		
+ECK125109870	2947691	2947717	forward	ccaattattgAACACCCTAACGGGTGTTTTTTTGTTTctggtctccc	metZWV	rho-independent	metZWV	2843439		
+ECK125109871	2947736	2947756	forward	ccataaaaaaGCGCCATTCAGCGCCTTTTTAtcatcccctt	metZWV	rho-independent	metZWV	2843439		
+ECK125230272	2964320	2964339	reverse	ggtaaaaaaaCCGACGCACACTGGCGTCGGctctggcagg	lgt-thyA,thyA	rho-independent	lgt-thyA	6308660		
+ECK125230271	2965066	2965095	reverse	tctgatgaccAAAAATGGAAAGCGTTCCGGTTCCGGTACGgtcgtttttc	lgt	rho-independent	lgt-thyA	1991715		
+ECK125162188	3020500	3020522	forward	atgacagatgCCCTCTTCCCGCAGGGAAGAGGGttaaataagg	ssnA	rho-independent	ygfK-ssnA	10074077		
+ECK120030219	3046126	3046145	reverse	atctgactaaAAAGGCGCCGAAGCGCCTTTagaaaatagt	gcvP,gcvTHP	rho-independent	gcvTHP	8181752		
+ECK125160784	3051048	3051072	reverse	atgaggaaaaTCTCCCGGCGAAAAAACCGGGAGATgaaagtgtga	ygfB-pepP-ubiHI	rho-independent	ygfB-pepP-ubiHI	1339425		
+ECK125134722	3056235	3056283	forward	acaagaaatcCGCAAAATGATTCGGCAACGTCGTCGTGCGTTAACGCCGGAACAACAGCaggaaatggg	ssrS,ssrS	rho-dependent	ssrS-fau	21036909		
+ECK120015443	3058644	3058660	reverse	atttttttaaCGGGGGAGGTTCCCCCGtcagatcatt	rpiA	rho-independent	rpiA	8366047		
+ECK120034436	3060660	3060680	forward	atcaaataatGCCTGATAGCACATATCAGGCgttgtcctca	argP	rho-independent	argP	2034653		
+ECK120015456	3071431	3071450	reverse	cgctgaaacaAGGGCAGGTTTCCCTGCCCTgtgatttttt	epd-pgk,pgk,pgk,pgk	rho-independent	epd-pgk-fbaA	16102000		
+ECK120010839	3091089	3091112	forward	ttaacccctaCCCCACGCGTACAACCGCGTGGGGagacgacgcg	endA,endA	rho-independent	endA	7867949		
+ECK120010838	3091103	3091123	forward	acgcgtacaaCCGCGTGGGGAGACGACGCGGatttttaact	endA,endA	rho-independent	endA	7867949		
+ECK120048899	3099654	3099674	reverse	aagtgaaaaaGCCCCGGCACGATACCGGGGCgaggcgatta	ansB,ansB	rho-independent	ansB	2407723		
+ECK120010813	3150552	3150576	reverse	gttaaaaaaaTGCCCGGTTGTGAAAAGCAACCGGGcatcattgtg	exbBD,exbD	rho-independent	exbBD	2670903		
+ECK125203449	3184478	3184520	reverse	gtaaaaaaacCTCACTAAAATTATGGTTACCAGAATCAGGGCAGTCTTAGGAGtggcggcata	sroG-ribB	rho-dependent	sroG-ribB	22431636		
+ECK120033262	3191716	3191735	reverse	caaacactaaAACGGGCCATCAGGCCCGTTatatcagtgc	glgS,glgS	rho-independent	glgS	1324388		
+ECK120010834	3211042	3211072	forward	tgtagttgtaAGGCCGTGCTTCCGAAAGGAATGCGCGGCTTattttcgttt	rpsU	rho-independent	rpsU-dnaG-rpoD	6186393		
+ECK120010865	3214943	3214962	forward	ctctgcacaaACGCCACCTTTTCGGTGGCGttttttatcg	rpoD,rpoD,rpoD,rpsU-dnaG-rpoD,rpsU-dnaG-rpoD,rpsU-dnaG-rpoD	rho-independent	rpsU-dnaG-rpoD	6186393 6222240 6269063		
+ECK120010818	3269959	3269992	reverse	ccaaaagtaaAAACCCGCCGAAGCGGGTTTTTACGTAAAACAGGtgaaactgac	garPLRK-rnpB	rho-independent	garPLRK-rnpB	7489504		
+ECK120010793	3269962	3269975	reverse	aaagtaaaaaCCCGCCGAAGCGGGtttttacgta	rnpB	rho-independent	garPLRK-rnpB	9175883		
+ECK120010794	3270075	3270088	reverse	aaagcaaaaaCCCGCCGAAGCGGGtttttacgta	rnpB	rho-independent	garPLRK-rnpB	9175883		
+ECK120010795	3270188	3270201	reverse	aaagcaaaaaCCCGCCGAAGCGGGtttttacgta	rnpB	rho-independent	garPLRK-rnpB	9175883		
+ECK120010873	3308999	3309021	reverse	cccggttaaaAGCCCCCCGCCGCAGCGGAGGGCaaatggcaac	metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp,metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp,pnp,rpsO-pnp	rho-independent	metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp	2432069		
+ECK120020622	3311372	3311398	reverse	gtcagcttgaAAAAAGGGGCCACTCAGGCCCCCTTTTctgaaactcg	rpsO	rho-independent	metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp			
+ECK120020526	3318031	3318043	reverse	cataaaaaaaGGGCCTAAAGCCCagttattctg	metY,metY	rho-independent	metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp	6364142		
+ECK120020525	3318072	3318087	reverse	taacaaaaaaCCCCGATAAATCGGGGctttatataa	metY,metY	rho-independent	metY-rimP-nusA-infB-rbfA-truB-rpsO-pnp	6364142		
+ECK120034435	3322035	3322071	reverse	ggaccaaaacGAAAAAAGACGCTTTTCAGCGTCTCTTTTCTGGAATTtggtaccgag	secG-leuU,secG-leuU	rho-independent	secG-leuU	18033800		
+ECK120010851	3324942	3324969	reverse	ttgataagaaAAAACCCCGGAGCACGCCCCGGGGTTTTcggtacaaat	rlmE-ftsH,rlmE-ftsH	rho-independent	rlmE-ftsH	8444796		
+ECK125095455	3328806	3328846	reverse	ccgggaccagAAGCAAAAAAATACCGACCCGGGTACAAGTCCCAGGTCAGCtacaattcac	greA,greA	rho-independent	greA	20008510		
+ECK120010811	3348261	3348289	forward	tgacatacaaCTCCCTTCAAACTCCCCCCGACAATAAGAaaatcacgta	rpoN-hpf-ptsN-rapZ-npr	rho-dependent	yrbG-kdsDC-lptCAB-rpoN-hpf-ptsN-rapZ-npr	8025669		
+ECK125109867	3350671	3350697	forward	gtattcgcgcACCCCGGTCTAGCCGGGGTCATTTTTTagtggctttt	arcZ	rho-independent	arcZ	11448770		
+ECK120034950	3376249	3376277	reverse	cattaaaaagACAAAACAGGCCGCCTGGGCCTGTTTTGTattacttcac	sspAB	rho-independent	sspAB	1721886		
+ECK120015170	3377756	3377782	reverse	ttttagctatAAAAAAACCCGCCGAAGCGGGTTTTTTcgaaaattgt	rplM-rpsI,rpsI	rho-independent	rplM-rpsI	15126466		
+ECK125165413	3382115	3382154	forward	cgttaatgtcGTAAACCGGGCATCAGGCTTACGTGTGATGTCCGGTTAACtcgtggtatg	degQ	rho-independent	degQS	8576051		
+ECK125165414	3382157	3382178	forward	cggttaactcGTGGTATGCTGCTGCCGTTCCCttttttaatg	degQ	rho-independent	degQS	8576051		
+ECK125165412	3383281	3383316	forward	gtgcgctcaaAACAAAAAACCGGAGTCTGTGCTCCGGTTTTTTATTatccgctaat	degS	rho-independent	degQS	8576051		
+ECK120030670	3400005	3400036	reverse	cgtatcagacCAGGCAGGGTAAACAGACACTTCCCCTGCCTGcatccgatta	mreB,mreB,mreB	rho-independent	mreBCD	17090951		
+ECK120020522	3407286	3407302	forward	agcgtcaaaaGGCCGGATTTTCCGGCCttttttatta	accBC,accBC	rho-independent	accBC	8226664		
+ECK120020527	3410029	3410042	forward	ccgattatttACGCAAATTTGCGTgccaaaattt	yhdT-panF-prmA	rho-independent	yhdT-panF-prmA	8226664		
+ECK120029529	3411593	3411626	forward	tgcttgattaAAAAGGCGCTACTCGGCATGGGGAAGCGCCTTTTttataggtgt	dusB-fis	rho-independent	dusB-fis	1459953		
+ECK120026395	3418143	3418177	forward	gataaatcagAAACATAAAGGCGCTTTCGGGTGCCTTTATTATTTccagtgaaac	acrEF	rho-independent	acrEF	1720861		
+ECK125135063	3438444	3438504	reverse	acaagcgcctGAAAGCAGAAGACCAGTGGTAAAAAAGTGATTTACTTTCTTGCCACTGGCCTCCCAGTTCCcccgattgcc	arfA	rho-independent	arfA	21435036		
+ECK120010871	3439581	3439595	reverse	gtataaaaaaACCCGCCGGGGCGGGtttttttacg	rpsMKD-rpoA-rplQ,rpsMKD-rpoA-rplQ	rho-independent	rpsMKD-rpoA-rplQ	2989779		
+ECK120010874	3448267	3448285	reverse	gaaaaaataaACGGCTCATTTCTGAGCCGtttattcgta	rpsJ-rplCDWB-rpsS-rplV-rpsC-rplP-rpmC-rpsQ	rho-independent	rpsJ-rplCDWB-rpsS-rplV-rpsC-rplP-rpmC-rpsQ	6222285		
+ECK125165931	3453298	3453358	reverse	tattttataaACGAAAATGATTACTCCTCAGACCCATTACGATTGATGGGAGAGTGTAACCGTTCTTACGTagctccccga	rpsJ-rplCDWB-rpsS-rplV-rpsC-rplP-rpmC-rpsQ	rho-independent	rpsJ-rplCDWB-rpsS-rplV-rpsC-rplP-rpmC-rpsQ	7844821		
+ECK120015455	3555795	3555820	forward	gtgtaagtttAGCCGGATAACGCGCCAGATCCGGCTtacatctctg	malT	rho-independent	malT	3015733		
+ECK120010816	3559754	3559831	reverse	cagctttttgACGTTTCGCGCCAGGGCAAAGCCAGCGTCAATGACGCGGATCGGCTACGCAAATACCTGGCGCGTTTTGGTCTGACGTgggaagccgt	glpEGR,glpGR,glpR,glpR	rho-independent	glpEGR	8955387		
+ECK120010800	3575688	3575711	reverse	tcgaaaagaaCCCGGTAGCGTCACAACTACCGGGcgaacaaact	gntKU,gntRKU,gntU	rho-independent	gntRKU	8655507 9135111		
+ECK120011169	3577006	3577038	reverse	catgactaaaAACAGCAGCAGTAAAACAGACCCTACTGCTGTTaaaacaagcg	gntK	rho-independent	gntRKU	9135111		
+ECK120011168	3577622	3577652	reverse	aagaattaaaAATGTTACGGGTAACTGTTATCGGTAACATTgtccagccgg	gntR,gntR,gntR	rho-independent	gntRKU			
+ECK120010841	3599887	3599907	reverse	aaaaacaaaaACCCCGGACTCTCATCCAGGGttctctgctt	rpoH,rpoH,rpoH,rpoH,rpoH	rho-independent	rpoH	6387714		
+ECK120010846	3640570	3640591	forward	cgtgttcctgAACGCCCGCATATGCGGGCGTTttgctttttg	uspA,uspA,uspA	rho-independent	uspA	1453957		
+ECK125160657	3647652	3647689	reverse	aatgcgttaaATGTTAAAGGGCTAAGAGTAGTGTGCTCTTAGCCCTTAattacgtttc	dinQ	rho-independent	dinQ	23408903		
+ECK125160656	3648117	3648147	forward	gctggaaagtAAAAAACCGACGCAAAGTCGGTTTTTTTACAtccggattcg	agrA	rho-independent	agrA	23408903		
+ECK125160655	3648348	3648384	forward	gctggaaagtAAAAAACCGACGCAAAGTCGGTTTTTTTACGTCCTGAttcagacctc	agrB	rho-independent	agrB	23408903		
+ECK125109868	3663541	3663571	reverse	gtaaatgagaGTAAGGTTGAACATGAAGGTTCAGCCTTACTctttcctgct	gadW,gadW,gadXW	rho-independent	gadAXW	18808381		
+ECK120010812	3664915	3664935	reverse	aacggtttatTAGTCTGGAGACGGCAGACTAtcctcttccc	gadAX,gadX	rho-independent	gadAXW	11976288		
+ECK120010805	3664943	3664961	forward	ctatcctcttCCCGGTCCCCTATGCCGGGttttttttat	gadY	rho-independent	gadY			
+ECK120030802	3699899	3699929	reverse	agtaagaacgAAAAAGGCCGCAGAGTTTCCCCCCTGCGGCCtggtccgggc	ldrD	rho-independent	ldrD	12123448		
+ECK120033265	3720286	3720313	forward	cacagaatctAAGATCCCTGCCATTTGGCGGGGATTTTtttatttgtt	cspA,cspA	rho-independent	cspA	17416651		
+ECK120020528	3722291	3722310	reverse	cgataaaaaaAGCCTGCCAGATGGCAGGCTatttaataac	glyQS	rho-independent	glyQS	6309809		
+ECK120010847	3739530	3739570	forward	aacagtaactTTTCCGGCTTCCCGTTCGTCAGTACCTCGGGAAGCCGCCAAccaggataaa	malS	rho-independent	malS	1544897		
+ECK120010848	3739595	3739620	forward	cagccctaatCAGCGTTGCAGGATAAAGCACCGCTCactcttcaac	malS	rho-independent	malS	1544897		
+ECK120010831	3754906	3754941	reverse	tcaggttcccGTAGGCATGATAAGACGCGTAAGCGTCGCATCAGGCaatgaatacc	aldB	rho-independent	aldB	7768815		
+ECK120051403	3776155	3776175	forward	gcctttcaaaAGTAAGCAACGTCTGCTTACTgcccctctac	mtlADR	rho-independent	mtlADR	8300537		
+ECK120051404	3776189	3776209	forward	cctctacctgCTTCGGCCGATAAAGCCGACGataatactcc	mtlADR	rho-independent	mtlADR	8300537		
+ECK120051405	3776277	3776304	forward	aatcgcgttaCGGGGAGGAAGTTTTTTCAGATACTCCCggaacgcctg	mtlADR	rho-independent	mtlADR	8300537		
+ECK120051406	3776401	3776419	forward	ccgtattaccCCGCGCCGGGAATGCGCGGccgccaattt	mtlADR	rho-independent	mtlADR	8300537		
+ECK120010872	3811209	3811225	reverse	ataacaaaaaACCCCGCCGGAGCGAGGttttttgtta	rpmBG,yicR-rpmBG	rho-independent	yicR-rpmBG-mutM	7035835		
+ECK125109869	3815096	3815119	reverse	agtaatatgaCGCCGGATGACTTTTCATCCGGCGagtttcttta	rph-pyrE	rho-independent	rph-pyrE	1375912		
+ECK120035133	3815807	3815828	reverse	agacaaaaaaAAGGCGACTCATCAGTCGCCTTaaaaatcagt	rph	rho-independent	rph-pyrE	1375912 6207018		
+ECK120035134	3817574	3817603	forward	ccgccttcacAAATGCCGCCACTCAAACAGAGCGGCATTTttcttccccg	yicC	rho-independent	yicC	2664418		
+ECK120051400	3850746	3850779	reverse	ctggcgggtaAAAAAAATACGCGCTTACCTTAACGATAAGCGCGatgttgttca	ivbL-ilvBN	rho-independent	ivbL-ilvBN-uhpABC			
+ECK120033264	3852835	3852982	reverse	cttaaacgaaAAACCCCGCCCGGTTTGCGCCGGCGGGGTTTTGGAATCGTGTGTTGTTCCAGTCCCTACGGCGCATTGCCGACGACCACCACCACACGCACGACGACCACTGCGGCGGATGGCGCAGTTGGTAGTAGTTTTGCGTTGAGCATGGAAGTagtcattggg	ivbL	rho-independent	ivbL-ilvBN-uhpABC	2578464		
+ECK120035137	3853118	3853144	reverse	tgcagataacAAAAAACCCCGCCGGAGCGAGGTTTCGtcagtcgcct	istR-1,istR-2	rho-independent	istR-1,istR-2	15620655		
+ECK120035136	3853662	3853689	forward	aagtcgcaccAAAGGGGAGCGGGAAACCGCTCCCCTTTtatatttagc	tisB	rho-independent	tisB	15620655		
+ECK120034958	3888462	3888509	forward	atgtgtgaccTCAAAATGGTTCAATATTGACAACAAAATTGTCGATCACCGCCCTTGAtttgcccttc	tnaC,tnaCAB	rho-dependent	tnaCAB	9045840		
+ECK120010807	3902249	3902292	reverse	aaagaaagaaTTAACGCATCGCATCCAGACTGTTCTGAATGCGACGATAATTAAggtgctttaa	bglGFB	rho-independent	bglGFB	3034860		
+ECK120010798	3905636	3905687	reverse	actccaaaaaAAAACCTGAAAAAAACGGCCTGACGTGAATCAAGCAATTTTTTTCAGGTTTTgcccgcttag	bglG,bglG	rho-independent	bglGFB	3034860		
+ECK120010808	3906593	3906634	reverse	tataaacaaaAAAACCCGACTTCACCAGTATTCTCTGGTTATGTCAGGTTTTgcctgcgaat	bglGFB	rho-independent	bglGFB	3034860		
+ECK120035132	3908495	3908517	reverse	tcggtcggtcCCCTCGCCCCTCTGGGGAGAGGGttagggtgag	pstSCA	rho-independent	pstSCAB-phoU	2993631		
+ECK120035131	3910443	3910473	reverse	attttgtaatGCCGGATGCGGCGTAAAACACCGTACCCGGCctggagtttt	pstS	rho-independent	pstSCAB-phoU	6365894		
+ECK120010864	3911810	3911830	reverse	aggaagaaaaATGCCCCGCTTACGCAGGGCAtccatttatt	glmUS,glmUS	rho-independent	glmUS	6206892		
+ECK120010863	3915508	3915530	reverse	cgcaaaaaaaAGCCAGCCTGTTTCCAGACTGGCttttgtgctt	atpBEFHAGDC,atpBEFHAGDC,atpIBEFHAGDC	rho-independent	atpIBEFHAGDC	6395859		
+ECK125141560	3923705	3923732	reverse	cttgatgcgtTGCCTGGTAAGCGGGTGCTTACCAGGCAtttttaatgc	asnC-mioC-mnmG	rho-independent	asnC-mioC-mnmG-rsmG	22337945		
+ECK120051384	3947032	3947067	forward	cgcccctgccAGAAATCATCCTTAGCGAAAGCTAAGGATTTTTTTTatctgaaata	rrsC-gltU-rrlC-rrfC,rrsC-gltU-rrlC-rrfC	rho-independent	rrsC-gltU-rrlC-rrfC	115888		
+ECK120033263	3950320	3950471	forward	agaaaagacaAAATGACAGCCCTTCTACGAGTGATTAGCCTGGTCGTGATTAGCGTGGTGGTGATTATTATCCCACCGTGCGGGGCTGCACTTGGACGAGGAAAGGCTTAGAGATCAAGCCTTAACGAACTAAGACCCCCGCACCGAAAGGTCCGGGGGTTTtttttgacct	ilvL,ilvL	rho-independent	ilvLXG_1G_2MEDA	6154938		
+ECK120010824	3956883	3956909	reverse	tagggaaaaaTGCCTGATAGCGCTTCGCTTATCAGGCctacccgcgc	ilvY	rho-independent	ilvY	2642900		
+ECK120010822	3956967	3956985	forward	tgcctcaattAGCGGCTCATGTAGCCGCTttttctgcgc	ilvA,ilvEDA,ilvLXG_1G_2MEDA,ilvLXG_1G_2MEDA	rho-independent	ilvLXG_1G_2MEDA	2642900		
+ECK120020524	3957062	3957123	forward	ggttacgcacCGGTTCGGGGCTGTTTTCCAGCACCACTTCCGGCAACAATGCCACGCCACAGCCGAGTGCCAccatcgatac	ilvA,ilvEDA,ilvLXG_1G_2MEDA,ilvLXG_1G_2MEDA	rho-dependent	ilvLXG_1G_2MEDA	2642900		
+ECK120034952	3966305	3966335	forward	ctcctgtgacCAGGCAGCGAAAAGACATGAGTCGATGACCGtaaacaggca	rhoL	rho-dependent	rhoL-rho	2423505		
+ECK120034953	3966342	3966359	forward	accgtaaacaGGCATGGATGATCCTGCCataccattca	rhoL	rho-dependent	rhoL-rho	2423505		
+ECK120034954	3966491	3966513	forward	ggctggaaaaCCTGGCTCGTATGCGTAAGCAGGacattatttt	rhoL	rho-independent	rhoL-rho	2423505		
+ECK120034955	3966718	3966740	forward	tctggtaagaTTCGCCCGCCGAAAGAAGGTGAAcgctattttg	rhoL	rho-independent	rhoL-rho	2423505		
+ECK120034956	3966856	3966876	forward	cgtctgcgtaTGGAACGTGGTAACGGTTCTActgaagattt	rhoL	rho-independent	rhoL-rho	2423505		
+ECK125095210	4005815	4005836	forward	gtttctcgcgCAGGCGCTGAAAATAGCGCCTGtttttatttc	pldA	rho-independent	pldA	6397464		
+ECK120030798	4023516	4023537	forward	agaataaattCAACCGCCCGTCAGGGCGGTTGtcatatggag	tatABC	rho-independent	tatABCD	10747959		
+ECK120010799	4051241	4051280	forward	gttatgagtcAGGAAAAAAGGCGACAGAGTAATCTGTCGCCTTTTTTCTTtgcttgcttt	csrC	rho-independent	csrC	12694612		
+ECK120010806	4055990	4056009	reverse	ttcctgacttAAGCGGCGCTGGTTATCCATcggagccatc	glnA,glnA	rho-independent	glnALG	2865194		
+ECK120010790	4106361	4106379	forward	tccctgtcttCCCCCACATGCTGTGGGGGttttttttat	cpxPQ	rho-independent	cpxPQ	9473036		
+ECK120048900	4110708	4110730	forward	aggaaagtaaGTGCCGGATATGAAATCCGGCACctgtcagact	cdh	rho-independent	cdh	2995360		
+ECK120015449	4114527	4114548	reverse	aacaaaaaaaTTCCAGTCCCGAAGGACTGGAAggctcaatcg	glpFKX	rho-independent	glpFKX	1400248		
+ECK120010852	4120368	4120385	reverse	ccaataaaaaTGGGGCCTTTCAGCCCCAtcaaacaatg	hslVU	rho-independent	hslVU	8244018		
+ECK120030801	4162137	4162164	reverse	gtaatcggtaTTATGCCGGATGCTGGCGCATCCGGCATgggttttact	trmA	rho-independent	trmA	1999392		
+ECK120051382	4171760	4171803	forward	caggcatcaaATAAAACGAAAGGCTCAGTCGAAAGACTGGGCCTTTCGTTTTATctgttgtttg	rrlB-rrfB,rrsB-gltT-rrlB-rrfB,rrsB-gltT-rrlB-rrfB	rho-independent	rrsB-gltT-rrlB-rrfB	7028991		
+ECK120051383	4171935	4171962	forward	caaattaagcAGAAGGCCATCCTGACGGATGGCCTTTTtgcgtttcta	rrlB-rrfB,rrsB-gltT-rrlB-rrfB,rrsB-gltT-rrlB-rrfB	rho-independent	rrsB-gltT-rrlB-rrfB	7028991		
+ECK120030799	4178328	4178356	forward	cgttgcacaaGGCGTGAGATTGGAATACAATTTCGCGCCttttgttttt	secE-nusG	rho-independent	secE-nusG	2137819		
+ECK120010869	4189599	4189613	forward	taacgtaaaaACCCGCTTCGGCGGGtttttttatg	rplJL-rpoBC,rplKAJL-rpoBC,rpoBC	rho-independent	rplKAJL-rpoBC	6278450		
+ECK120034949	4190328	4190349	forward	caaaataacaAAACCCACCTTAAGGTGGGTTTcgccagagaa	yjaZ	rho-independent	yjaZ	6278450		
+ECK120010819	4200582	4200601	forward	agttttaacgAAGGGGTGGTTTCACCCCTTttgtctttct	hupA	rho-independent	hupA	2187099		
+ECK120029978	4236159	4236209	forward	taaagtatgtATCCCCAAAATAATTCGAGTCATTGCATCTGTGGCTAGAAGTATGAAGGGAttaaccataa	yjbE	rho-independent	yjbEFGH			
+ECK120010791	4242539	4242555	reverse	agaaaaaaagGCGCTCCGTGGAGCGCCgaataacagt	malEFG	rho-independent	malEFG	2836810		
+ECK120029531	4268317	4268340	forward	atgcaggaaaGCAGGCTGGAGCTACCCAGCCTGCagtgaaatta	tyrB	rho-independent	tyrB	3521591		
+ECK120010836	4277927	4277957	both	aagatgaacaAAACTAAAGCGCCACAAGGGCGCTTTAGTTTgttttccggt	ryjA,soxR	rho-independent	ryjA,soxR	11448770		
+ECK120010785	4313801	4313827	forward	agaaattgagATTCATCCACTACTTGCATGGATGAGTaatgattaat	rpiB	rho-independent	rpiB	8576032		
+ECK120010827	4338210	4338237	reverse	aaggccaggcGGCGTAATGTTATTTAAACAATTACGCCttcagcggaa	adiA	rho-independent	adiA	8383109		
+ECK120010856	4345631	4345650	reverse	aaaagaggtgGCCAGGGGGATCACCTGGCAgcatgctgcc	dcuB-fumB,dcuB-fumB,fumB	rho-independent	dcuB-fumB	2656658		
+ECK120010858	4366844	4366864	reverse	acaagaaaaaAGGCACGTCATCTGACGTGCCttttttattt	aspA	rho-independent	aspA-dcuA	2987841		
+ECK120034948	4376705	4376731	forward	aataagcaatAACGGTACGACAGCTGTGTCGTGCCGTttgttttttc	ecnB	rho-independent	ecnAB	9677290		
+ECK120010868	4377783	4377800	reverse	gcggagaaaaGGTCCGAAAATTCGGACCcgatggaatt	ampC	rho-independent	ampC	7559452		
+ECK120010861	4378966	4378987	reverse	tccatacaaaACGGCCCGCCATAGGCGGGCCGgatttacatt	frdABCD	rho-independent	frdABCD	6251026 7010184		
+ECK120015957	4466284	4466298	reverse	tcacaatttaTCGTTCAGGAAACGAtcaggacagg	treR,treR,treR,treR	rho-independent	treR	9148912		
+ECK120034951	4472426	4472445	reverse	ggcaaaaaaaAGCCCCTCGATTGAGGGGCTgggaatgggt	pyrLBI,pyrLBI	rho-independent	pyrLBI	6300835		
+ECK120014970	4480932	4480957	reverse	tgtaagagatAAAAAAGGCCGGAGCATGCTCCGGCCttcgttttca	valS,valS	rho-independent	holC-valS	3275659		
+ECK120020906	4542851	4542902	forward	tgtggctcgaCGCATCTTCCTCATTCTTCTCTCCAAAAACCACCTCATGCAATATAAACATCtataaataaa	fimE	rho-dependent	fimE	16321930		
+ECK120010802	4549922	4549942	reverse	tcatcagtctGAGCCTGCCATTGGCAGGCTCtggtgtcctt	gntP	rho-independent	gntP	8550444		
+ECK120026315	4599620	4599635	reverse	aggggtaaaaCCGTCCAGGAGCAGGGaaaagggcag	dnaTC-yjjA,yjjB-dnaTC-yjjA	rho-independent	yjjB-dnaTC-yjjA	2844800		
+ECK120026312	4600139	4600157	reverse	tggaaattaaTGCGCTGGCGGCAATGGCAcagcacagaa	dnaTC,yjjB-dnaTC	rho-independent	yjjB-dnaTC-yjjA	2844800		
+ECK120010875	4621635	4621659	forward	tgccttgtgaAGCCGGAGCGGGAGACTGCTCCGGCtttttagtat	deoBD,deoCABD,deoCABD	rho-independent	deoCABD	3299264		
+ECK120029975	4633111	4633144	forward	taagacgtggCGCATCAGGCATCGTGCACCGAATGCCGGATGCGgcgtgaacgc	trpR	rho-independent	trpR	7012834		
+ECK120010876	4639538	4639572	forward	taaggttgaaAAATAAAAACGGCGCTAAAAAGCGCCGTTTTTTTTgacggtggta	creABCD,creD	rho-independent	creABCD	3531171		
+ECK120026481	4639539	4639572	reverse	aaggttgaaaAATAAAAACGGCGCTAAAAAGCGCCGTTTTTTTTgacggtggta	arcA,arcA,arcA,arcA,arcA,arcA,arcA	rho-independent	arcA	2984198		

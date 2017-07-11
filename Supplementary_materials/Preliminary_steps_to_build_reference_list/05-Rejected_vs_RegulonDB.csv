@@ -1,0 +1,261 @@
+UpGene Nth Occ.	Ref. Seq. overlapped at ..(%)	Shift RNIE fct start vs Ref. fct start	Shift RNIE fct end vs Ref fct end	Strand	Start	End	Upstream Gene	Term Type	Start	End	Strand	RNIE Mode	Bit Score	IT Seq	UpGene Name	UpGene Start	UpGene End	Dist. upSTOPcodon-ITfunctionalStart	DwGene Name	DwGene Start	DwGene End	Dist. ITfunctionalEnd-dwSTARTcodon	ID complementary couple	Compl. Dist. Class	Compl. Genomic Class	Info on the rev. compl.	Palindromic Percentage of Overlap	Free Energy (kcal/mol)	Dot-Bracket Secondary Structure
+1				+	9199	9226	talB	Intrinsic		
+1				-	20771	20784	rpsT	Intrinsic		
+1				+	27252	27279	ispH	Intrinsic		
+1				+	29248	29272	dapB	Intrinsic		
+1				-	83574	83603	leuL	Intrinsic		
+1				+	107501	107544	lpxC	Intrinsic		
+1				-	120144	120168	aroP	Intrinsic		
+1				+	127590	127619	aceF	Intrinsic		
+1				+	129366	129394	lpd	Intrinsic		
+1				+	134249	134272	acnB	Intrinsic		
+1				-	134756	134783	speD	Intrinsic		
+1				-	138801	138816	gcd	Intrinsic		
+1				-	185090	185111	dapD	Intrinsic		
+1				+	191721	191738	tsf	Intrinsic		
+1				-	217020	217051	proS	Intrinsic		
+1				+	256442	256474	gpt	Intrinsic		
+1				+	359477	359502	cynX	Intrinsic		
+1				-	360364	360403	lacA	Intrinsic		
+2				+	360436	360460	cynX	Intrinsic		
+2				-	360436	360460	lacA	Intrinsic		
+1				+	423710	423732	malZ	Intrinsic		
+2				+	423754	423777	malZ	Intrinsic		
+1				+	426980	427010	secD	Intrinsic		
+1				-	430320	430346	tsx	Intrinsic		
+1				-	452781	452800	yajG	Intrinsic		
+1				+	454068	454089	bolA	Intrinsic		
+1				+	457955	457979	clpX	Intrinsic		
+1				+	496222	496253	htpG	Intrinsic		
+1				-	498169	498204	aes	Intrinsic		
+1				+	506484	506511	chiX	Intrinsic		
+1				+	602600	602632	pheP	Intrinsic		
+1				+	631269	631314	cstA	Intrinsic		
+1				+	705162	705188	nagE	Intrinsic		
+1				+	707177	707201	glnS	Intrinsic		
+1				+	714434	714465	pgm	Intrinsic		
+1				+	786018	786044	aroG	Intrinsic		
+1				+	850205	850232	ompX	Intrinsic		
+1				+	884133	884161	mdfA	Intrinsic		
+1				-	949524	949553	pflA	Intrinsic		
+1				-	950430	950489	pflB	Intrinsic		
+1				+	1015123	1015147	rmf	Intrinsic		
+1				+	1036831	1036857	hyaF	Intrinsic		
+1				+	1066056	1066080	agp	Intrinsic		
+1				+	1080017	1080061	putP	Intrinsic		
+1				+	1112755	1112783	opgH	Intrinsic		
+1				+	1145951	1145975	psrD	Intrinsic		
+1				-	1158548	1158569	fhuE	Intrinsic		
+1				+	1234900	1234921	fadR	Intrinsic		
+1				-	1260118	1260132	prs	Intrinsic		
+1				+	1268262	1268290	kdsA	Intrinsic		
+1				+	1309839	1309870	tonB	Intrinsic		
+1				-	1310285	1310324	yciB	Intrinsic		
+1				-	1312692	1312722	yciE	Intrinsic		
+1				-	1313809	1313839	yciG	Intrinsic		
+1				-	1314407	1314432	trpA	Intrinsic		
+1				+	1332869	1332898	cysB	Intrinsic		
+1				-	1336536	1336572	ribA	Intrinsic		
+1				-	1344966	1344992	rnb	Intrinsic		
+1				-	1364842	1364937	pspF	Intrinsic		
+1				+	1403686	1403717	abgR	Intrinsic		
+1				+	1407241	1407273	fnrS	Intrinsic		
+1				+	1411726	1411748	dbpA	Intrinsic		
+1				+	1447061	1447087	feaB	Intrinsic		
+1				-	1561300	1561325	dosP	Intrinsic		
+1				-	1566928	1566954	gadC	Intrinsic		
+1				+	1620790	1620823	yneM	Intrinsic		
+1				-	1620841	1620898	mgrR	Intrinsic		
+1				-	1643058	1643073	ydfJ	Intrinsic		
+1				+	1669727	1669744	asr	Intrinsic		
+1				-	1696160	1696187	malI	Intrinsic		
+1				+	1731735	1731764	lhr	Intrinsic		
+1				+	1787511	1787534	aroH	Intrinsic		
+1				-	1793240	1793263	ihfA	Intrinsic		
+1				-	1797387	1797406	rplT	Intrinsic		
+1				+	1814282	1814306	katE	Intrinsic		
+1				-	1819889	1819910	osmE	Intrinsic		
+1				-	1823081	1823150	spy	Intrinsic		
+1				-	1842956	1842978	topB	Intrinsic		
+2				-	1842961	1842983	topB	Intrinsic		
+1				-	1886041	1886067	fadD	Intrinsic		
+1				+	1896331	1896355	sdaA	Intrinsic		
+1				-	1909676	1909703	htpX	Intrinsic		
+1				-	1930109	1930129	eda	Intrinsic		
+1				-	1942243	1942272	ruvB	Intrinsic		
+2				-	1942297	1942327	ruvB	Intrinsic		
+1				-	1944839	1944878	ruvC	Intrinsic		
+1				-	1946686	1946717	aspS	Intrinsic		
+1				-	1956471	1956497	cutC	Intrinsic		
+1				+	1959841	1959867	argS	Intrinsic		
+1				-	1978120	1978150	otsA	Intrinsic		
+1				-	1997565	1997595	fliY	Intrinsic		
+1				+	2004135	2004189	fliT	Intrinsic		
+1				+	2005666	2005698	amyA	Intrinsic		
+1				+	2031739	2031755	rseX	Intrinsic		
+1				-	2079365	2079393	dacD	Intrinsic		
+1				+	2088132	2088164	hisL	Intrinsic		
+1				+	2165186	2165224	cyaR	Intrinsic		
+1				-	2191015	2191056	mrp	Intrinsic		
+1				+	2194365	2194388	metG	Intrinsic		
+1				-	2217682	2217704	bglX	Intrinsic		
+1				+	2280846	2280858	rplY	Intrinsic		
+1				-	2309632	2309646	ompC	Intrinsic		
+1				-	2388027	2388045	nuoN	Intrinsic		
+1				-	2426052	2426070	ubiX	Intrinsic		
+1				-	2438305	2438332	fabB	Intrinsic		
+1				-	2506446	2506469	glk	Intrinsic		
+1				-	2519356	2519380	xapR	Intrinsic		
+2				-	2519511	2519537	xapR	Intrinsic		
+1				-	2520720	2520742	xapB	Intrinsic		
+1				+	2531431	2531446	cysK	Intrinsic		
+1				+	2534385	2534402	crr	Intrinsic		
+1				-	2628928	2628955	guaA	Intrinsic		
+1				-	2654528	2654552	iscX	Intrinsic		
+1				-	2682097	2682115	glyA	Intrinsic		
+1				-	2689179	2689207	glmY	Intrinsic		
+1				+	2736934	2736962	pheA	Intrinsic		
+1				-	2736934	2736962	tyrA	Intrinsic		
+1				-	2744231	2744263	ffh	Intrinsic		
+1				-	2820692	2820709	recA	Intrinsic		
+1				-	2840499	2840523	hycI	Intrinsic		
+1				+	2852326	2852343	hypE	Intrinsic		
+1				-	2871256	2871306	ygbE	Intrinsic		
+1				-	2922188	2922213	csrB	Intrinsic		
+1				+	2945713	2945739	metV	Intrinsic		
+2				+	2945758	2945778	metV	Intrinsic		
+1				-	2962342	2962361	thyA	Intrinsic		
+2				-	2963088	2963117	thyA	Intrinsic		
+1				+	3018522	3018544	ssnA	Intrinsic		
+1				-	3044148	3044167	gcvP	Intrinsic		
+1				-	3049070	3049094	visC	Intrinsic		
+1				-	3056666	3056682	rpiA	Intrinsic		
+1				+	3058682	3058702	argP	Intrinsic		
+1				-	3069453	3069472	pgk	Intrinsic		
+1				+	3089111	3089134	endA	Intrinsic		
+2				+	3089125	3089145	endA	Intrinsic		
+1				-	3097676	3097696	ansB	Intrinsic		
+1				-	3148574	3148598	exbD	Intrinsic		
+1				-	3189738	3189757	glgS	Intrinsic		
+1				+	3209064	3209094	rpsU	Intrinsic		
+1				-	3307021	3307043	pnp	Intrinsic		
+1				-	3309394	3309420	rpsO	Intrinsic		
+1				-	3316053	3316065	metY	Intrinsic		
+2				-	3316094	3316109	metY	Intrinsic		
+1				-	3320057	3320093	leuU	Intrinsic		
+1				-	3322964	3322991	ftsH	Intrinsic		
+1				-	3326828	3326868	obgE	Intrinsic		
+1				+	3348693	3348719	arcZ	Intrinsic		
+1				-	3374271	3374299	sspB	Intrinsic		
+1				-	3375778	3375804	rpsI	Intrinsic		
+1				+	3380137	3380176	degQ	Intrinsic		
+2				+	3380179	3380200	degQ	Intrinsic		
+1				+	3381303	3381338	degS	Intrinsic		
+1				-	3398027	3398058	mreB	Intrinsic		
+1				+	3405308	3405324	accC	Intrinsic		
+1				+	3408051	3408064	prmA	Intrinsic		
+1				+	3409615	3409648	fis	Intrinsic		
+1				-	3436466	3436526	arfA	Intrinsic		
+1				-	3437603	3437617	rplQ	Intrinsic		
+1				-	3446289	3446307	rpsQ	Intrinsic		
+1				-	3451320	3451380	gspB	Intrinsic		
+1				+	3553817	3553842	malT	Intrinsic		
+1				-	3557776	3557853	glpR	Intrinsic		
+1				-	3573711	3573734	gntU	Intrinsic		
+2				-	3575029	3575061	gntU	Intrinsic		
+1				-	3575645	3575675	gntR	Intrinsic		
+1				-	3597910	3597930	rpoH	Intrinsic		
+1				+	3638593	3638614	uspA	Intrinsic		
+1				-	3645675	3645712	dinQ	Intrinsic		
+1				-	3661564	3661594	gadW	Intrinsic		
+1				-	3662938	3662958	gadX	Intrinsic		
+1				+	3662966	3662984	gadY	Intrinsic		
+1				-	3697922	3697952	ldrD	Intrinsic		
+1				+	3718309	3718336	cspA	Intrinsic		
+1				-	3720314	3720333	glyS	Intrinsic		
+1				+	3737553	3737593	malS	Intrinsic		
+2				+	3737618	3737643	malS	Intrinsic		
+1				-	3752929	3752964	aldB	Intrinsic		
+1				+	3774178	3774198	mtlR	Intrinsic		
+2				+	3774212	3774232	mtlR	Intrinsic		
+3				+	3774300	3774327	mtlR	Intrinsic		
+4				+	3774424	3774442	mtlR	Intrinsic		
+1				-	3809232	3809248	rpmG	Intrinsic		
+1				-	3813119	3813142	pyrE	Intrinsic		
+1				+	3815597	3815626	yicC	Intrinsic		
+1				-	3848769	3848802	ilvN	Intrinsic		
+1				-	3851141	3851167	istR	Intrinsic		
+1				+	3851685	3851712	tisB	Intrinsic		
+1				-	3900272	3900315	bglB	Intrinsic		
+1				-	3904616	3904657	phoU	Intrinsic		
+1				-	3906518	3906540	pstA	Intrinsic		
+1				-	3908466	3908496	pstS	Intrinsic		
+1				-	3913531	3913553	atpC	Intrinsic		
+1				-	3921728	3921755	mnmG	Intrinsic		
+1				+	3945055	3945090	trpT	Intrinsic		
+1				+	3948343	3948494	yifE	Intrinsic		
+1				-	3954906	3954932	ilvY	Intrinsic		
+1				+	3954990	3955008	ilvA	Intrinsic		
+1				+	3964514	3964536	rho	Intrinsic		
+2				+	3964741	3964763	rho	Intrinsic		
+3				+	3964879	3964899	rho	Intrinsic		
+1				+	4021539	4021560	tatC	Intrinsic		
+1				+	4049264	4049303	csrC	Intrinsic		
+1				-	4054013	4054032	glnL	Intrinsic		
+1				+	4104384	4104402	cpxP	Intrinsic		
+1				+	4108731	4108753	cdh	Intrinsic		
+1				-	4112550	4112571	glpX	Intrinsic		
+1				-	4118391	4118408	hslU	Intrinsic		
+1				-	4160160	4160187	trmA	Intrinsic		
+1				+	4169783	4169826	rrfB	Intrinsic		
+2				+	4169958	4169985	rrfB	Intrinsic		
+1				+	4176351	4176379	nusG	Intrinsic		
+1				+	4187622	4187636	rpoC	Intrinsic		
+1				+	4198605	4198624	yjaH	Intrinsic		
+1				+	4234182	4234232	yjbE	Intrinsic		
+1				-	4240562	4240578	malG	Intrinsic		
+1				+	4266340	4266363	tyrB	Intrinsic		
+1				+	4275950	4275980	soxR	Intrinsic		
+1				-	4275950	4275980	ryjA	Intrinsic		
+1				+	4311824	4311850	rpiB	Intrinsic		
+1				-	4336233	4336260	adiA	Intrinsic		
+1				-	4343654	4343673	fumB	Intrinsic		
+1				-	4364867	4364887	aspA	Intrinsic		
+1				+	4374728	4374754	ecnB	Intrinsic		
+1				-	4375806	4375823	ampC	Intrinsic		
+1				-	4376989	4377010	frdD	Intrinsic		
+1				-	4464307	4464321	treR	Intrinsic		
+1				-	4470449	4470468	pyrL	Intrinsic		
+1				-	4478955	4478980	valS	Intrinsic		
+1				-	4547945	4547965	gntP	Intrinsic		
+1				-	4597643	4597658	yjjA	Intrinsic		
+2				-	4598162	4598180	yjjA	Intrinsic		
+1				+	4619658	4619682	deoD	Intrinsic		
+1				+	4631134	4631167	trpR	Intrinsic		
+1				+	4637561	4637595	creD	Intrinsic		
+1	97.2973	1	6	+	274	310	thrL	Intrinsic	275	316	+	Genome	33.51	AAAAAGCCCGCACCTGACAGTGCGGGCTTTTTTTTTCGACCA	thrL	190	255	20	thrA	337	2799	21	1	Least Distant	Co-directionality	Start=265;End=306;Strand=-;% Overlapping=76.1905;Bit Score=32.77	69.0476	-21.00	(((((((((((((......)))))))))))))..........	
+1	100	-3	14	-	65800	65821	araD	Intrinsic	65786	65824	-	Genome	21.46	AAACCAGGCTATACTCAAGCCTGGTTTTTTGATGGATTT	araD	65855	66550	31	polB	63429	65780	2357	3	Least Distant	Co-directionality	Start=65796;End=65836;Strand=+;% Overlapping=74.359;Bit Score=18.28	58.9744	-14.40	((((((((((.......))))))))))............	
+1	98.2456	1	1	+	193442	193498	frr	Intrinsic	193443	193499	+	Gene	18.52	AAAAACGCCGCTCAGTAGATCCTTGCGGATCGGCTGGCGGCGTTTTGCTTTTTATTC	frr	192872	193429	14	dxr	193521	194717	22	11	Least Distant	Co-directionality	Start=193434;End=193488;Strand=-;% Overlapping=80.7018;Bit Score=15.25	47.2727	-30.40	.((((((((((.((((.(((((....))))).))))))))))))))...........	no_overlap join
+2	100	-4	14	+	460983	461002	hupB	Intrinsic	460979	461016	+	Genome	20.87	CAAGGGCGCATCTACTGATGTGCCTTTTTTATTTGTAT	hupB	460675	460947	32	ppiD	461139	463010	123						-16.40	.(((((((((((....)))))))))))...........	
+1	92.3077	3	7	+	473487	473525	amtB	Intrinsic	473490	473532	+	Genome	17.01	AAACAGCCGGACGGTTTTCACCTCCGGCTATTTTTTTAATTGT	amtB	472190	473476	14	ybaY	474603	475175	1071	25	Most Distant	Convergence	Start=473481;End=473521;Strand=-;% Overlapping=74.4186;Bit Score=17.66	65.8537	-15.50	....(((((((.(((....))))))))))..............	
+1	100	-7	16	-	709341	709357	fur	Intrinsic	709325	709364	-	Gene	14.21	GAAAAGCGAGAGTTACAGCTCTCACTTATTTGTTATTACT	fur	709423	709869	59	nagB	702034	702834	7291	38	Most Distant	Convergence	Start=709335;End=709374;Strand=+;% Overlapping=75;Bit Score=16.97	62.5	-10.00	...(((.((((((....)))))).))).............	
+1	100	-1	11	-	925385	925409	infA	Intrinsic	925374	925410	-	Genome	19.46	TAAAAGGTCGGTTTAACCGGCCTTTTTATTTTGTGAT	infA	925448	925666	38	serW	925107	925194	267						-14.10	.(((((((((((...)))))))))))...........	
+1	100	-3	13	+	1085294	1085318	phoH	Intrinsic	1085291	1085331	+	Gene	16.78	GTGCAGAGCCCGGGCGAACCGGGCTTTGTTTTGGGTGTTTA	phoH	1084215	1085279	12	ycdT	1092099	1093457	6768						-21.10	..(((((((((((.....)))))))))))............	no_overlap join
+1	100	-6	14	+	1151083	1151110	acpP	Intrinsic	1151077	1151124	+	Gene	14.35	GAACATCTCCAGGCGGTCGTTCGACCGCCTGAGTTTTATCTTTTTGTC	acpP	1150838	1151074	3	fabF	1151162	1152403	38						-18.60	.........(((((((((....))))))))).................	
+1	0	67	84	-	1291684	1291708	hns	Intrinsic	1291600	1291641	-	Gene	15.49	AAAAACGGCGTCGATTGCTCAACGCCGTTTCGTGGATAACAC	hns	1291732	1292145	91	ychJ	1287897	1288355	3703	73	Most Distant	Convergence	Start=1291612;End=1291651;Strand=+;% Overlapping=71.4286;Bit Score=25.62	57.5	-15.20	..(((((((((.((....)).))))))))).(((.....)))	
+1	100	-3	13	-	1320999	1321019	trpL	Intrinsic	1320986	1321022	-	Genome	17.38	CCCAGCCCGCCTAATGAGCGGGCTTTTTTTTGAACAA	trpL	1321062	1321106	40	trpE	1319408	1320970	1578						-14.00	...((((((((....).))))))).............	
+1	97.1429	1	9	+	1386291	1386325	tyrR	Intrinsic	1386292	1386334	+	Gene	19.17	ATATGCCTGATGGTGCAACACCATCAGGCATATTAAATTATGC	tyrR	1384744	1386285	7	ycjG	1386954	1387919	620	79	Most Distant	Convergence	Start=1386282;End=1386324;Strand=-;% Overlapping=76.7442;Bit Score=15.81	76.7442	-23.90	(((((((((((((((...)))))))))))))))..........	
+1	100	-5	12	-	1684729	1684749	fumA	Intrinsic	1684717	1684754	-	Genome	16.25	ACAGAGCCGCCCTTCGGGGCGGTTTTTTTACATGGCAC	fumA	1684755	1686401	1	fumC	1683209	1684612	1508	91	Least Distant	Co-directionality	Start=1684727;End=1684764;Strand=+;% Overlapping=73.6842;Bit Score=14.50	52.6316	-17.10	..((((((((((....))))))))))............	
+1	100	-5	15	-	1797185	1797200	pheM	Intrinsic	1797170	1797205	-	Genome	19.90	TGAAAGCCTCCCAGTGGAGGCTTTTTTTGTATGCGC	pheM	1797250	1797294	45	pheS	1795983	1796966	1187						-14.90	.((((((((((....))))))))))...........	no_overlap join
+1	100	-3	13	+	2354745	2354774	glpC	Intrinsic	2354742	2354787	+	Gene	17.92	CTGATGCCCGGTAAGCATGTGGTTACCGGGCATTTTTGCGTACACG	glpC	2353543	2354733	9	yfaD	2354926	2355825	139						-21.90	..((((((((((((.(....).))))))))))))............	no_overlap join
+1	100	-4	14	-	2595825	2595846	bamC	Intrinsic	2595811	2595850	-	Genome	16.69	ATACAGGGCTGGAATCATCCGGCCCTTTTTTCTGATATGA	bamC	2595853	2596887	3	purC	2594927	2595640	884						-16.10	....(((((((((....)))))))))..............	
+1	100	-4	15	+	3212965	3212984	rpoD	Intrinsic	3212961	3212999	+	Genome	23.11	ACAAACGCCACCTTTTCGGTGGCGTTTTTTATCGCCCAC	rpoD	3211069	3212910	51	ileX	3213620	3213695	621	186	Most Distant	Convergence	Start=3212952;End=3212988;Strand=-;% Overlapping=71.7949;Bit Score=15.90	56.7568	-16.50	..((((((((((.....))))))))))............	no_overlap join
+4	100	-5	15	-	3268210	3268223	rnpB	Intrinsic	3268195	3268228	-	Gene	22.48	AAAAACCCGCTTCGGCGGGTTTTTGCTTTTGGAG	rnpB	3268238	3268614	10	tdcA	3264149	3265087	4046	193	Least Distant	Convergence	Start=3268205;End=3268238;Strand=+;% Overlapping=70.5882;Bit Score=18.71	64.7059	-14.70	((((((((((....))))))))))..........	no_overlap join
+1	88.5714	4	5	+	3416165	3416199	acrF	Intrinsic	3416169	3416204	+	Gene	17.04	ATAAAGGCGCTTTCGGGTGCCTTTATTATTTCCAGT	acrF	3413055	3416159	10	yhdV	3416412	3416633	208	208	Least Distant	Co-directionality	Start=3416155;End=3416198;Strand=-;% Overlapping=83.3333;Bit Score=14.15	61.1111	-13.20	(((((((((((....)))))))))))..........	
+1	0	-462	-446	+	3646140	3646170	gor	Intrinsic	3645678	3645724	+	Gene	15.17	TTAAAGGGCTAAGAGTAGTGTGCTCTTAGCCCTTAATTACGTTTCCG	gor	3644322	3645674	4	arsR	3646551	3646904	827	224	Least Distant	Convergence	Start=3645669;End=3645713;Strand=-;% Overlapping=76.5957;Bit Score=14.29	68.8889	-22.00	...((((((((((((((...)))))))))))))).............	no_overlap join
+1	100	-1	13	-	3813830	3813851	rph	Intrinsic	3813817	3813852	-	Genome	21.09	TAAGGCGACTGATGAGTCGCCTTTTTTTTGTCTGTA	rph	3813886	3814572	34	pyrE	3813150	3813791	667						-14.70	.(((((((((....))))))))).............	
+1	21.6216	116	11	-	3850858	3851005	ivbL	Intrinsic	3850847	3850889	-	Genome	26.86	AAAACCCCGCCGGCGCAAACCGGGCGGGGTTTTTCGTTTAAGC	ivbL	3850913	3851011	24	ilvB	3849119	3850807	1728	239	Least Distant	Co-directionality	Start=3850857;End=3850899;Strand=+;% Overlapping=76.7442;Bit Score=21.45	60.4651	-21.10	(((((((((((((......)).)))))))))))..........	
+1	100	-1	11	-	3903659	3903710	bglG	Intrinsic	3903648	3903711	-	Gene	20.78	CAAAACCTGAAAAAAATTGCTTGATTCACGTCAGGCCGTTTTTTTCAGGTTTTTTTTTGGAGTT	bglG	3903754	3904590	43	bglF	3901743	3903620	1905						-27.00	.((((((((((((((((.(((((((....))))))).))))))))))))))))...........	
+1	100	-2	13	-	3909833	3909853	glmS	Intrinsic	3909820	3909855	-	Genome	14.97	GATGCCCTGCGTAAGCGGGGCATTTTTCTTCCTGTT	glmS	3909862	3911691	7	pstS	3908508	3909548	1312						-17.70	((((((((((....))))))))))............	no_overlap join
+1	100	-1	13	+	4003838	4003859	pldA	Intrinsic	4003837	4003872	+	Genome	18.15	GCAGGCGCTGAAAATAGCGCCTGTTTTTATTTCAGG	pldA	4002885	4003754	83	recQ	4003887	4005716	15						-16.10	((((((((((....))))))))))............	
+1	100	-2	12	+	4188351	4188372	yjaZ	Intrinsic	4188349	4188384	+	Genome	14.59	CAAAACCCACCTTAAGGTGGGTTTCGCCAGAGAATT	yjaZ	4187809	4188348	1	nudC	4194926	4195699	6542						-13.80	..(((((((((....)))))))))............	
