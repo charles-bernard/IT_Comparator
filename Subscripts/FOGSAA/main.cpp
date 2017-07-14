@@ -8,11 +8,11 @@ THE OUTPUT IS A TABLE OF HOMOLOGY
 */
 
 //#include <iostream.h>
-#include <stdio.h>;
-#include <string.h>;
-#include <stdlib.h>;
-#include <sys/time.h>;
-#include <unistd.h>;
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 
 struct fields
@@ -21,14 +21,12 @@ struct fields
   char *seq;
 };
 
-
 struct gene
 {
   char *id;
   char *seq;
   struct gene *next;
 };
-
 
 static void
 usage(char *argv0)
@@ -44,25 +42,22 @@ usage(char *argv0)
 	  "  -o: specify the output file corresponding to the table of homology.\n");
 }
 
-
 static void
 testFile(char *filename)
 {
   FILE *f;
   f = fopen(filename, "r");
   if(f == 0) {
-    fprintf(stderr,
-	    "Error: Impossible to open \"%s\"\n", filename);
+    fprintf(stderr, "Error: Impossible to open \"%s\"\n", filename);
     exit(4);
   }
   fclose(f);
 }
 
-
 struct fields *
 getFields(char *line)
 {
-  char *sep = "\t\n";
+  char sep[4] = "\t\n";
   char *p;
   int k;
   struct fields *fields = (struct fields *)malloc(sizeof(struct fields));
@@ -81,7 +76,6 @@ getFields(char *line)
   }
   return fields;
 }
-  
 
 struct gene *
 append(struct gene *list, char *id, char *seq)
@@ -93,7 +87,6 @@ append(struct gene *list, char *id, char *seq)
   newGene -> next = NULL;
   return newGene;
 }
-
 
 void
 printList(struct gene *list)
@@ -107,16 +100,14 @@ printList(struct gene *list)
   }
 }
 
-
 void
 freeList(struct gene *list)
 {
   if(list -> next != NULL) {
     freeList(list -> next);
-    free(list);
   }
+  free(list);
 }
-
 
 struct gene *
 parseFile(char *filename)
@@ -143,23 +134,31 @@ parseFile(char *filename)
   return(head);
 }
 
-
 void
 compare(struct gene *refList, struct gene *vsList)
 {
+  int refLen, vsLen, diffLen;
   struct gene *headVsList = vsList;
+  
   while(refList != NULL) {
+    refLen = strlen(refList -> seq);
     vsList = headVsList;
     while(vsList != NULL) {
+      //printf("%s\n", vsList -> seq);
+      vsLen = strlen(vsList -> seq);
+      diffLen = abs(refLen - vsLen);
+      if(diffLen < (refLen / 4) && refLen > 1000)
+	printf("%d %d\n", refLen, vsLen);
+	/*
       printf("%s:%s///%s:%s\n",
 	     refList -> id, refList -> seq,
 	     vsList -> id, vsList -> seq);
+	*/
       vsList = vsList -> next;
     }
     refList = refList -> next;
   }
 }
-
 
 int
 main(int argc, char **argv)
@@ -209,13 +208,13 @@ main(int argc, char **argv)
   testFile(vsFile);
 
   parseFile(refFile);
-  //parseFile2(vsFile);
   refListGenes = parseFile(refFile);
-  //vsListGenes = parseFile(vsFile);
+  vsListGenes = parseFile(vsFile);
 
-  //compare(refListGenes, vsListGenes);
+  compare(refListGenes, vsListGenes);
   
-  printList(refListGenes);
+  //printList(vsListGenes);
+  freeList(refListGenes);
   //printList(vsListGenes);
   
   return 0;
