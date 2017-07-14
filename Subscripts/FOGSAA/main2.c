@@ -13,19 +13,22 @@ THE OUTPUT IS A TABLE OF HOMOLOGY
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-
-
-struct fields
-{
-  char *id;
-  char *seq;
-};
+#include "load_genes.h"
+#include "load_amino_and_blossum.h"
 
 struct gene
 {
   char *id;
   char *seq;
   struct gene *next;
+};
+
+const int nbAmino = 24;
+struct blossum
+{
+  int scoreMatrix[nbAmino][nbAmino];
+  int minScore;
+  int maxScore;
 };
 
 static void
@@ -40,98 +43,6 @@ usage(char *argv0)
 	  "  -c: specify the file containing the list of sequences to be compared with the reference list.\n");
   fprintf(stderr,
 	  "  -o: specify the output file corresponding to the table of homology.\n");
-}
-
-static void
-testFile(char *filename)
-{
-  FILE *f;
-  f = fopen(filename, "r");
-  if(f == 0) {
-    fprintf(stderr, "Error: Impossible to open \"%s\"\n", filename);
-    exit(4);
-  }
-  fclose(f);
-}
-
-struct fields *
-getFields(char *line)
-{
-  char sep[4] = "\t\n";
-  char *p;
-  int k;
-  struct fields *fields = (struct fields *)malloc(sizeof(struct fields));
-  
-  p = strtok(line, sep);
-  k = 1;
-  while(p != NULL) {
-    if(k == 1) {
-      fields -> id = strdup(p);
-      k = 2;
-    } else if(k == 2) {
-      fields -> seq = strdup(p);
-      k = 1;
-    }
-    p = strtok(NULL, sep);
-  }
-  return fields;
-}
-
-struct gene *
-append(struct gene *list, char *id, char *seq)
-{
-  struct gene *newGene = (struct gene *)malloc(sizeof(struct gene));
-  list -> next = newGene;
-  newGene -> id = id;
-  newGene -> seq = seq;
-  newGene -> next = NULL;
-  return newGene;
-}
-
-void
-printList(struct gene *list)
-{
-  if(list == NULL)
-    printf("Empty list of genes\n");
-  else {
-    printf("%s:%s\n", list -> id, list -> seq);
-    if(list -> next != NULL)
-      printList(list -> next);
-  }
-}
-
-void
-freeList(struct gene *list)
-{
-  if(list -> next != NULL) {
-    freeList(list -> next);
-  }
-  free(list);
-}
-
-struct gene *
-parseFile(char *filename)
-{
-  FILE *f = fopen(filename, "r");
-  
-  const size_t bufSize = 4096; // This should be enough for protein sequences
-  char buf[bufSize];
-  struct fields *fields;
-  
-  int isHead = 1;
-  struct gene *head = (struct gene *)malloc(sizeof(struct gene));
-  struct gene *list = (struct gene *)malloc(sizeof(struct gene));
-
-  while(fgets(buf, bufSize, f)) {
-    fields = getFields(buf);
-    list = append(list, fields -> id, fields -> seq);
-    if(isHead == 1) {
-      head = list;
-      isHead = 0;
-    }
-  }
-  fclose(f);
-  return(head);
 }
 
 void
@@ -165,7 +76,11 @@ main(int argc, char **argv)
 {
   int i;
   char *refFile, *vsFile, *outFile;
+  
   struct gene *refListGenes, *vsListGenes;
+
+  char *amino;
+  struct blossum *blossum;
   
   /* This scripts requires to be called with 7 args exactly:
   (1 is the script itself, 3 options and their 3 arguments) */
@@ -207,16 +122,12 @@ main(int argc, char **argv)
   testFile(refFile);
   testFile(vsFile);
 
-  parseFile(refFile);
   refListGenes = parseFile(refFile);
   vsListGenes = parseFile(vsFile);
 
-  compare(refListGenes, vsListGenes);
-  
-  //printList(vsListGenes);
-  freeList(refListGenes);
-  //printList(vsListGenes);
-  
+  amino = loadAmino("amino.txt");
+  blossum = loadBlossum("fscore.txt");
+
   return 0;
 }
 
