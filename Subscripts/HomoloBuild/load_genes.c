@@ -10,7 +10,6 @@ struct fields
   char *seq;
 };
 
-
 struct gene
 {
   char *id;
@@ -40,13 +39,11 @@ getFields(char *line)
   
   p = strtok(line, sep);
   while(p != NULL) {
-    if(k == 1) {
+    if(k == 1)
       fields -> id = strdup(p);
-      k = 2;
-    } else if(k == 2) {
+    else if(k == 2)
       fields -> seq = strdup(p);
-      k = 1;
-    }
+    k++;
     p = strtok(NULL, sep);
   }
   return fields;
@@ -85,8 +82,9 @@ freeList(struct gene *list)
 }
 
 struct gene *
-parseFile(char *filename)
+loadGenes(char *filename)
 {
+  testFile(filename);
   FILE *f = fopen(filename, "r");
   
   const size_t bufSize = 4096; // This should be enough for protein sequences
