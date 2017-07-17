@@ -12,11 +12,8 @@ THE OUTPUT IS A TABLE OF HOMOLOGY
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include "load_genes.h"
+#include "list_genes.h"
 #include "edlib.h"
-
-
-
 
 struct gene
 {
@@ -39,15 +36,16 @@ usage(char *argv0)
 	  "  -o: specify the output file corresponding to the table of homology.\n");
 }
 
+/* This function is there in case one would like to print the alignment
+   btw two homologuous proteins */
 void
-printAlignment(const char* query, const int queryLength,
-	       const char* target, const int targetLength,
-	       EdlibAlignResult result)
+writeAlignment(char *queryId, char* query, int queryLength,
+	       char *targetId, char* target, int targetLength,
+	       int position, unsigned char *alignment,
+	       int alignmentLength)
 {
-  int position = *result.endLocations;
-  unsigned char *alignment = result.alignment;
-  int alignmentLength = result.alignmentLength;
-  
+  printf("(Q: %s) VS (T: %s)\n\n", queryId, targetId);
+
   int tIdx = -1;
   int qIdx = -1;
   for (int start = 0; start < alignmentLength; start += 50) {
@@ -93,68 +91,95 @@ printAlignment(const char* query, const int queryLength,
 }
 
 void
-compare(struct gene *refList, struct gene *vsList)
+compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
 {
+  int g = 1; int ng = lenList(refList);
   char *refSeq, *vsSeq, *bestSeq;
-  int k = 0, refLen, vsLen, bestLen, diffLen;
+  char *refId, *vsId, *bestId = ".";
+  int refLen, vsLen, bestLen, diffLen;
+  
   struct gene *headVsList = vsList;
-
+  struct gene *oldGene, *previousBestGene, *bestGene;
+  
   int score, bestScore;
-  char *bestId;
-  //EdlibAlignResult bestResult;
+  float scoreLenRatio;
+  int bestPosition;
+  int bestAlignmentLength;
+  unsigned char *bestAlignment = (unsigned char *)malloc(sizeof(unsigned char));
+
+  FILE *f = fopen(filename, "w");
+  fprintf(f, "refId\tvsId\tedlibAlignmentScore\n");
   
   while(refList != NULL) {
-    
+
+    refId = refList -> id;
     refSeq = refList -> seq;
     refLen = strlen(refSeq);
+
+    bestScore = refLen * 2;
     
     vsList = headVsList;
+          
     while(vsList != NULL) {
 
-      bestScore = -1000;
-
+      vsId = vsList -> id;
       vsSeq = vsList -> seq;
       vsLen = strlen(vsSeq);
       
       diffLen = abs(refLen - vsLen);
-      if(diffLen < (refLen / 4)) {
-	//EdlibAlignResult result = edlibAlign(refSeq, refLen, vsSeq, vsLen, edlibDefaultAlignConfig());
-	EdlibAlignResult result = edlibAlign(refSeq, refLen, vsSeq, vsLen, edlibNewAlignConfig(-1, EDLIB_MODE_NW, EDLIB_TASK_PATH));
-	score = result.editDistance;
-	printf("%d\n", score);
-	printAlignment(refSeq, refLen, vsSeq, vsLen, result);
-	edlibFreeAlignResult(result);
+      if(diffLen < (refLen / 5)) {
 
-	/*
-	if(score > bestScore) {
-	  bestId = vsList -> id;
-	  bestScore = score;
-	  //edlibFreeAlignResult(bestResult);
-	  bestSeq = vsSeq;
-	  bestLen = vsLen;
-	  //EdlibAlignResult bestResult = result;
-	  edlibFreeAlignResult(result);
-	} else {
-	  edlibFreeAlignResult(result);
-	}
-	*/
+	/* Here is just a reminder of how to run edlib by default: */
+	//EdlibAlignResult result = edlibAlign(refSeq, refLen, vsSeq, vsLen, edlibDefaultAlignConfig());
 	
+	EdlibAlignResult result = edlibAlign(refSeq, refLen, vsSeq, vsLen,
+					     edlibNewAlignConfig(-1, EDLIB_MODE_NW, EDLIB_TASK_PATH));
+	score = result.editDistance;	  
+	if(result.alignment && score < bestScore) {
+	  bestScore = score;
+	  bestId = vsId;
+	  bestGene = vsList;
+	  previousBestGene = oldGene;
+	  if(wa == 1) {
+	    free(bestAlignment);
+	    bestSeq = vsSeq;
+	    bestLen = vsLen;
+	    bestPosition = *result.endLocations;
+	    bestAlignmentLength = result.alignmentLength;
+	    bestAlignment = (unsigned char *)malloc(sizeof(unsigned char) * (bestAlignmentLength));
+	    memcpy(bestAlignment, result.alignment, (bestAlignmentLength));
+	  }
+	}
+	edlibFreeAlignResult(result);
       }
+      oldGene = vsList;
       vsList = vsList -> next;
     }
+    /* The task might be quite long, so a counter is necessary */ 
+    printf("\rtreated gene n°%d/%d", g, ng);
+    fflush(stdout);
+    
+    scoreLenRatio = float(bestScore) / float(refLen);
+    if(scoreLenRatio < 0.5) {
+      if(wa == 1) {
+	writeAlignment(refId, refSeq, refLen, bestId, bestSeq, bestLen,
+		       bestPosition, bestAlignment, bestAlignmentLength);
+      }
+      fprintf(f, "%s\t%s\t%.2f\n", refId, bestId, scoreLenRatio);
+      
+      //prevent redundant comparison with already assigned and certain homologuous
+      if(scoreLenRatio < 0.1 && headVsList != bestGene) {
+	previousBestGene -> next = bestGene -> next;
+	free(bestGene);
+      }
 
-    /*
-    printf("Best Score:%d\n", bestScore);
-    printf("RefId: %s;BestId: %s\n", refList -> id, bestId);
-    printf("RefSeq:%s\n", refSeq);
-    printf("BestSeq:%s\n", bestSeq);
-    */
-    
-    //printAlignment(refSeq, refLen, bestSeq, bestLen, bestResult);
-    //edlibFreeAlignResult(bestResult);
-    
+    } else
+      fprintf(f, "%s\t.\t.\n", refId);
     refList = refList -> next;
+    g++;
   }
+  free(bestAlignment);
+  fclose(f);
 }
 
 int
@@ -162,9 +187,7 @@ main(int argc, char **argv)
 {
   int i;
   char *refFile, *vsFile, *outFile;
-  
   struct gene *refListGenes, *vsListGenes;
-
   
   /* This scripts requires to be called with 7 args exactly:
   (1 is the script itself, 3 options and their 3 arguments) */
@@ -206,7 +229,10 @@ main(int argc, char **argv)
   refListGenes = loadGenes(refFile);
   vsListGenes = loadGenes(vsFile);
 
-  compare(refListGenes, vsListGenes);
+  compare(outFile, refListGenes, vsListGenes, 0);
+
+  freeList(refListGenes);
+  freeList(vsListGenes);
 
   return 0;
 }
