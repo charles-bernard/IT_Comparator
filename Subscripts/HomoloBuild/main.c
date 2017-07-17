@@ -99,7 +99,8 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
   int refLen, vsLen, bestLen, diffLen;
   
   struct gene *headVsList = vsList;
-  struct gene *oldGene, *previousBestGene, *bestGene;
+  struct gene *oldGene = vsList, struct gene *previousBestGene = vsList;
+  struct gene *bestGene;
   
   int score, bestScore;
   float scoreLenRatio;
