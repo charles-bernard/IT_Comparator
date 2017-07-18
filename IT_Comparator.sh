@@ -173,19 +173,53 @@ function gff_to_tab {
 ###########################################################
 ###### I.4 translate ref genes ############################
 ###########################################################
-function translate_ref_genes {
+function translate_genes {
 	# get protein seq of ref genes
 
 	# Args
 	local SCRIPT="$1"; local GENOME="$2";
-	local ANNOTATION="$3"; OUT_FILE="$4"; local COMMAND="$5";
+	local ANNOTATION="$3"; OUT_PREFIX="$4"; local COMMAND="$5";
+
+	local ALL_GENES="$OUT_PREFIX""all_genes.csv";
+	local CDS_FILE="$OUT_PREFIX""genes-cds.csv";
+	local ABN_CDS_FILE="$OUT_PREFIX""genes-abnormal_cds.csv";
+	local NC_FILE="$OUT_PREFIX""genes-non_coding.csv";
 
 	printf "___________________________________________________________\n" >> "$COMMAND"
 	printf "TRANSLATE REF GENES:\n" >> "$COMMAND";
 
 	(set -x; 
-		awk -f "$SCRIPT" "$GENOME" "$ANNOTATION" \
-		> "$OUT_FILE" 2>"$TMP_TOOL_STDERR";
+		awk -v cds_file="$CDS_FILE" \
+		-v abn_cds_file="$ABN_CDS_FILE" \
+		-v nc_file="$NC_FILE" \
+		-f "$SCRIPT" "$GENOME" "$ANNOTATION" \
+		> "$ALL_GENES" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
+###### I.5 Build Homology Tables ##########################
+###########################################################
+
+function homolo_build {
+	# build homolo table between ref species and target species
+
+	# Args
+	local SCRIPT="$1"; local REF_FILE="$2";
+	local VS_FILE="$3"; local OUT_FILE="$4";
+	local COMMAND="$5";
+
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
+
+	(set -x; 
+		"$SCRIPT" -r "$REF_FILE" \
+		-c "$VS_FILE" -o "$OUT_FILE" \
+		2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
 
@@ -260,6 +294,7 @@ s=0;
 for i in $(ls -d "$INPUT_DIR"/*/); do
 	INSUB_DIR[$s]="$(basename $i)"; 
 	check_insubdir "$INPUT_DIR"/"${INSUB_DIR[$s]}";
+	SPECIES_DIR[$s]="$INPUT_DIR"/"${INSUB_DIR[$s]}";
 	confirm_species_name "${INSUB_DIR[$s]}";
 	SPECIES_NAME[$s]=$CUR_SPECIES_NAME;
 	if [ "${INSUB_DIR[$s]}" != "$REF_DIR" ]; then
@@ -302,6 +337,7 @@ for (( i=0; i<${#SPECIES_NAME[@]}; i++ )) do
 	SPECIES_OUTDIR[$i]="$OUTPUT_DIR"/"${SPECIES_NAME[$i]}";
 	mkdir -p "${SPECIES_OUTDIR[$i]}";
 done
+
 ##########################################################
 ###### GFF To Tab ########################################
 ##########################################################
@@ -316,20 +352,68 @@ REF_TAB_FILE="$REF_OUTDIR"/"00-list_ITs.csv";
 gff_to_tab "$SCRIPT" "$REF_IT_GFF" "$REF_TAB_FILE" "$COMMAND";
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
-	IT_GFF="$INPUT_DIR"/"${INSUB_DIR[$i]}"/"list_ITs.gff";
+	IT_GFF="${SPECIES_DIR[$i]}"/"list_ITs.gff";
 	TAB_FILE[$i]="${SPECIES_OUTDIR[$i]}"/"00-list_ITs.csv";
 	gff_to_tab "$SCRIPT" "$IT_GFF" "${TAB_FILE[$i]}" "$COMMAND";
 done
-##########################################################
-###### Translate Ref genes ###############################
-##########################################################
-printf "STEP 01) Translate Reference Genes\n" | tee -a "$LOG";
 
-SCRIPT="$SCRIPT_PATH"/"Subscripts"/"01-translate_ref_genes.awk";
+##########################################################
+###### Translate Genes ###################################
+##########################################################
+printf "STEP 01) Translate Genes\n" | tee -a "$LOG";
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"01-translate_genes.awk";
 
 REF_GENOME_SEQ="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
 REF_GENOME_ANNOTATIONS="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
-REF_GENES="$REF_OUTDIR"/"01-ref_genes.csv";
+REF_GENES_OUTDIR="$REF_OUTDIR"/"01-Genes";
+mkdir -p "$REF_GENES_OUTDIR";
+REF_PREFIX_GENES="$REF_GENES_OUTDIR"/;
+printf "\t* ""$REF_SPECIES""\n";
+translate_genes "$SCRIPT" "$REF_GENOME_SEQ" \
+	"$REF_GENOME_ANNOTATIONS" "$REF_PREFIX_GENES" "$COMMAND"; 
 
-translate_ref_genes "$SCRIPT" "$REF_GENOME_SEQ" \
-	"$REF_GENOME_ANNOTATIONS" "$REF_GENES" "$COMMAND"; 
+for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
+	GENOME_SEQ[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
+	GENOME_ANNOTATIONS[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+	GENES_OUTDIR[$1]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
+	mkdir -p "${GENES_OUTDIR[$i]}";
+	PREFIX_GENES[$i]="${GENES_OUTDIR[$i]}"/;
+	printf "\t* ""${SPECIES_NAME[$i]}""\n";
+	translate_genes "$SCRIPT" "${GENOME_SEQ[$i]}" \
+		"${GENOME_ANNOTATIONS[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
+done
+
+SUFFIX_GENES[0]="genes-cds.csv";
+SUFFIX_GENES[1]="genes-abnormal_cds.csv";
+SUFFIX_GENES[2]="genes-non_coding.csv";
+
+##########################################################
+###### Build Homology Tables #############################
+##########################################################
+printf "STEPS 02) Build Homology Table of Genes\n"
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main";
+
+printf "   * $REF_SPECIES _VS_\n";
+for (( i=0; i<${#GENES_OUTDIR[@]}; i++ )); do
+	HOMOLO_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"02-Homology_tables";
+	mkdir -p "${HOMOLO_OUTDIR[$i]}";
+	printf "\t* ""${SPECIES_NAME[$i]}""\n";
+	for (( j=0; j<${#SUFFIX_GENES[@]}; j++ )); do
+		if [ -f "${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$j]}" ] \
+		&& [ -f "$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$j]}" ]; then
+			printf "\t  * ""${SUFFIX_GENES[$j]%.*}""\n";
+			HOMOLO[$i,$j]="${HOMOLO_OUTDIR[$i]}"/"Homology-""${SUFFIX_GENES[$i]}";
+			REF_FILE="$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$i]}";
+			VS_FILE="${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$i]}";
+			homolo_build "$SCRIPT" "$REF_FILE" "$VS_FILE" \
+				"${HOMOLO[$i,$j]}" "$COMMAND";
+		else
+			printf "\t  * ""${SUFFIX_GENES[$j]%.*}"" (none in annotation)\n";
+			HOMOLO[$i,$j]="";
+		fi
+	done
+done
+
+
