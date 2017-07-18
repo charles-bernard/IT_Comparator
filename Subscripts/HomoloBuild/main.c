@@ -99,7 +99,7 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
   int refLen, vsLen, bestLen, diffLen;
   
   struct gene *headVsList = vsList;
-  struct gene *oldGene, *previousBestGene, *bestGene;
+  struct gene *oldGene, *beforeBestGene, *bestGene;
   
   int score, bestScore;
   float scoreLenRatio;
@@ -119,7 +119,7 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
     bestScore = refLen * 2;
     
     vsList = headVsList;
-    oldGene =  previousBestGene = vsList;
+    oldGene =  beforeBestGene = vsList;
           
     while(vsList != NULL) {
 
@@ -137,10 +137,11 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
 					     edlibNewAlignConfig(-1, EDLIB_MODE_NW, EDLIB_TASK_PATH));
 	score = result.editDistance;	  
 	if(result.alignment && score < bestScore) {
+	  /* Store variables relative to this new best target */
 	  bestScore = score;
 	  bestId = vsId;
 	  bestGene = vsList;
-	  previousBestGene = oldGene;
+	  beforeBestGene = oldGene;
 	  if(wa == 1) {
 	    free(bestAlignment);
 	    bestSeq = vsSeq;
@@ -161,21 +162,22 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
     fflush(stdout);
     
     scoreLenRatio = float(bestScore) / float(refLen);
-    if(scoreLenRatio < 0.5) {
+    if(scoreLenRatio < 1) { //0.5 is found to be a good threshold
       if(wa == 1) {
 	writeAlignment(refId, refSeq, refLen, bestId, bestSeq, bestLen,
 		       bestPosition, bestAlignment, bestAlignmentLength);
       }
       fprintf(f, "%s\t%s\t%.2f\n", refId, bestId, scoreLenRatio);
       
-      //prevent redundant comparison with already assigned and certain homologuous
+      /* prevent redundant comparison with already assigned and certain homologuous */
       if(scoreLenRatio < 0.1 && headVsList != bestGene) {
-	previousBestGene -> next = bestGene -> next;
+	beforeBestGene -> next = bestGene -> next;
 	free(bestGene);
       }
 
     } else
       fprintf(f, "%s\t.\t.\n", refId);
+    
     refList = refList -> next;
     g++;
   }
@@ -237,12 +239,3 @@ main(int argc, char **argv)
 
   return 0;
 }
-
-				
-
-
-
-
-
-
-
