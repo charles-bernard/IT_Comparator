@@ -210,11 +210,11 @@ function homolo_build {
 
 	# Args
 	local SCRIPT="$1"; local REF_FILE="$2";
-	local VS_FILE="$3"; local OUT_FILE="$4";
-	local COMMAND="$5";
+	local TITLE="$3"; local VS_FILE="$4";
+	local OUT_FILE="$5"; local COMMAND="$6";
+	local TMP_TOOL_STDERR="$7"; local LOG="$8";
 
-	printf "___________________________________________________________\n" >> "$COMMAND"
-	printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
+	printf "\t * ""$TITLE""\n" | tee -a "$LOG";
 
 	(set -x; 
 		"$SCRIPT" -r "$REF_FILE" \
@@ -375,8 +375,8 @@ translate_genes "$SCRIPT" "$REF_GENOME_SEQ" \
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	GENOME_SEQ[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
-	GENOME_ANNOTATIONS[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
-	GENES_OUTDIR[$1]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
+	GENOME_ANNOTATIONS[$i]="${SPECIES_DIR[$i]}"/"`ls "${SPECIES_DIR[$i]}" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+	GENES_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
 	mkdir -p "${GENES_OUTDIR[$i]}";
 	PREFIX_GENES[$i]="${GENES_OUTDIR[$i]}"/;
 	printf "\t* ""${SPECIES_NAME[$i]}""\n";
@@ -391,29 +391,40 @@ SUFFIX_GENES[2]="genes-non_coding.csv";
 ##########################################################
 ###### Build Homology Tables #############################
 ##########################################################
-printf "STEPS 02) Build Homology Table of Genes\n"
+printf "STEPS 02) Build Homology Table of Genes\n" | tee -a "$LOG";
 
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main";
+K=0;
 
-printf "   * $REF_SPECIES _VS_\n";
+printf "   * $REF_SPECIES _VS_ OTHER SPECIES\n";
+printf "     Parallelizing the process...\n";
+printf "      (Expect ~10min per Species)\n"
+printf "            (What about a tea?)\n";
+
+
 for (( i=0; i<${#GENES_OUTDIR[@]}; i++ )); do
 	HOMOLO_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"02-Homology_tables";
 	mkdir -p "${HOMOLO_OUTDIR[$i]}";
-	printf "\t* ""${SPECIES_NAME[$i]}""\n";
 	for (( j=0; j<${#SUFFIX_GENES[@]}; j++ )); do
 		if [ -f "${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$j]}" ] \
 		&& [ -f "$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$j]}" ]; then
-			printf "\t  * ""${SUFFIX_GENES[$j]%.*}""\n";
-			HOMOLO[$i,$j]="${HOMOLO_OUTDIR[$i]}"/"Homology-""${SUFFIX_GENES[$i]}";
-			REF_FILE="$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$i]}";
-			VS_FILE="${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$i]}";
-			homolo_build "$SCRIPT" "$REF_FILE" "$VS_FILE" \
-				"${HOMOLO[$i,$j]}" "$COMMAND";
+			HOMOLO[$i,$j]="${HOMOLO_OUTDIR[$i]}"/"Homology-""${SUFFIX_GENES[$j]}";
+			OUT_FILE[$K]="${HOMOLO[$i,$j]}";
+			REF_FILE[$K]="$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$j]}";
+			VS_FILE[$K]="${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$j]}";
+			TITLE[$K]="${SPECIES_NAME[$i]}"": (""${SUFFIX_GENES[$j]%.*}"")";
+			K=$(($K+1));
+
 		else
-			printf "\t  * ""${SUFFIX_GENES[$j]%.*}"" (none in annotation)\n";
+			#printf "\t  * ""${SUFFIX_GENES[$j]%.*}"" (none in annotation)\n";
 			HOMOLO[$i,$j]="";
 		fi
 	done
 done
-
-
+export -f homolo_build; export -f check_tool_stderr;
+printf "___________________________________________________________\n" >> "$COMMAND"
+printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
+parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+	::: "$SCRIPT" \
+	::: "${REF_FILE[@]}" :::+ "${TITLE[@]}" :::+ "${VS_FILE[@]}" :::+ "${OUT_FILE[@]}" \
+	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
