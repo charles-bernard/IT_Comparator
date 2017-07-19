@@ -216,12 +216,32 @@ function homolo_build {
 
 	printf "\t * ""$TITLE""\n" | tee -a "$LOG";
 
+	# (set -x; 
+	# 	"$SCRIPT" -r "$REF_FILE" \
+	# 	-c "$VS_FILE" -o "$OUT_FILE" \
+	# 	2>"$TMP_TOOL_STDERR";
+	# ) 2>> "$COMMAND";
+	# printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
+###### I.6 Correct Tables ##########################
+###########################################################
+function correct_table {
+	# Args
+	local SCRIPT="$1"; local INFILE="$2";
+	local COMMAND="$3";
+	local OUTFILE="$INFILE""_corrected";
+
 	(set -x; 
-		"$SCRIPT" -r "$REF_FILE" \
-		-c "$VS_FILE" -o "$OUT_FILE" \
-		2>"$TMP_TOOL_STDERR";
+		awk -f "$SCRIPT" "$INFILE" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
+	mv "$OUTFILE" "$INFILE";
 
 	# Exit if stderr_file not empty
 	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
@@ -391,16 +411,15 @@ SUFFIX_GENES[2]="genes-non_coding.csv";
 ##########################################################
 ###### Build Homology Tables #############################
 ##########################################################
-printf "STEPS 02) Build Homology Table of Genes\n" | tee -a "$LOG";
+printf "STEP 02) Build Homology Table of Genes\n" | tee -a "$LOG";
 
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main";
-K=0;
+K=0; N=0;
 
 printf "   * $REF_SPECIES _VS_ OTHER SPECIES\n";
 printf "     Parallelizing the process...\n";
 printf "      (Expect ~10min per Species)\n"
 printf "            (What about a tea?)\n";
-
 
 for (( i=0; i<${#GENES_OUTDIR[@]}; i++ )); do
 	HOMOLO_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"02-Homology_tables";
@@ -408,19 +427,19 @@ for (( i=0; i<${#GENES_OUTDIR[@]}; i++ )); do
 	for (( j=0; j<${#SUFFIX_GENES[@]}; j++ )); do
 		if [ -f "${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$j]}" ] \
 		&& [ -f "$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$j]}" ]; then
-			HOMOLO[$i,$j]="${HOMOLO_OUTDIR[$i]}"/"Homology-""${SUFFIX_GENES[$j]}";
-			OUT_FILE[$K]="${HOMOLO[$i,$j]}";
+			HOMOLO[$N]="${HOMOLO_OUTDIR[$i]}"/"Homology-""${SUFFIX_GENES[$j]}";
+			OUT_FILE[$K]="${HOMOLO[$N]}";
 			REF_FILE[$K]="$REF_GENES_OUTDIR"/"${SUFFIX_GENES[$j]}";
 			VS_FILE[$K]="${GENES_OUTDIR[$i]}"/"${SUFFIX_GENES[$j]}";
 			TITLE[$K]="${SPECIES_NAME[$i]}"": (""${SUFFIX_GENES[$j]%.*}"")";
 			K=$(($K+1));
-
 		else
-			#printf "\t  * ""${SUFFIX_GENES[$j]%.*}"" (none in annotation)\n";
-			HOMOLO[$i,$j]="";
+			HOMOLO[$N]="";
 		fi
+		N=$(($N+1));
 	done
 done
+
 export -f homolo_build; export -f check_tool_stderr;
 printf "___________________________________________________________\n" >> "$COMMAND"
 printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
@@ -428,3 +447,54 @@ parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
 	::: "$SCRIPT" \
 	::: "${REF_FILE[@]}" :::+ "${TITLE[@]}" :::+ "${VS_FILE[@]}" :::+ "${OUT_FILE[@]}" \
 	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+
+##########################################################
+##### Check subtables and build reference homology tab ###
+##########################################################
+printf "STEP 03) Correct tables and build reference homology table\n" | tee -a "$LOG";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"02-filter_homolotab.awk";
+
+for(( i=0; i < K; i++ )); do
+	correct_table "$SCRIPT" "${OUT_FILE[$i]}" "$COMMAND";
+done
+
+CONC_FILE[0]="$REF_PREFIX_GENES""conc_tables.csv";
+printf "$REF_SPECIES""\n" > "${CONC_FILE[0]}";
+for (( j=0; j<${#SUFFIX_GENES[@]}; j++ )); do
+	if [ -f "$REF_PREFIX_GENES""${SUFFIX_GENES[$j]}" ]; then
+		awk '{ print $1; }' \
+			"$REF_PREFIX_GENES""${SUFFIX_GENES[$j]}" >> "${CONC_FILE[0]}";
+	fi
+done
+
+N=0;
+for (( i=0; i<${#HOMOLO_OUTDIR[@]}; i++ )); do
+	CONC_FILE[$((i+1))]="${HOMOLO_OUTDIR[$i]}"/"conc_tables.csv";
+	printf "${SPECIES_NAME[$i]}""\n" > "${CONC_FILE[$((i+1))]}";
+	for (( j=0; j<${#SUFFIX_GENES[@]}; j++ )); do 
+		if [ -f "${HOMOLO[$N]}" ]; then
+			awk 'NR > 1 { print $2; }' "${HOMOLO[$N]}" >> "${CONC_FILE[$((i+1))]}";
+		elif [ -f "$REF_PREFIX_GENES""${SUFFIX_GENES[$j]}" ]; then
+			awk 'NR > 1 { print "."; }' \
+			"$REF_PREFIX_GENES""${SUFFIX_GENES[$j]}" >> "${CONC_FILE[$((i+1))]}";
+		fi
+		N=$((N+1));
+	done
+done
+
+mkdir -p "$OUTPUT_DIR"/"Gene_homology_table"
+HOMOLO_TAB="$OUTPUT_DIR"/"Gene_homology_table"/"Homology_table.csv";
+TMP=$(mktemp);
+# Concatenate columns
+pr -mts "${CONC_FILE[@]}" > "$TMP";
+# And sort resulting table
+head -1 "$TMP" > "$HOMOLO_TAB"; 
+tail -n +2 "$TMP" | sort -k1 -n >> "$HOMOLO_TAB";
+rm "$TMP";
+
+##########################################################
+# Modify Species Annotation according to Reference Names #
+##########################################################
+printf "STEP 04) Modify Annotations with respect to Reference Gene Names\n" | tee -a "$LOG";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"03-modify_annotation.awk";
+
