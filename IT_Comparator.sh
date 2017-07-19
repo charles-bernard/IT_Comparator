@@ -228,7 +228,7 @@ function homolo_build {
 }
 
 ###########################################################
-###### I.6 Correct Tables ##########################
+###### I.6 Correct Tables #################################
 ###########################################################
 function correct_table {
 	# Args
@@ -246,6 +246,28 @@ function correct_table {
 	# Exit if stderr_file not empty
 	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
 }
+
+###########################################################
+###### I.7 Modify Annotation ##############################
+###########################################################
+function modify_annotation {
+	# Args
+	local SCRIPT="$1"; local COL="$2";
+	local HOMOLO_TAB="$3"; local OLD_ANNOTATION="$4"; 
+	local OUTFILE="$5"; local COMMAND="$6";
+
+	(set -x;
+		awk -v column="$COL" \
+		-f "$SCRIPT" \
+		"$HOMOLO_TAB" "$OLD_ANNOTATION" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
 
 ###########################################################
 # II. PARAMETERS FOR THE PIPELINE
@@ -380,33 +402,34 @@ done
 ##########################################################
 ###### Translate Genes ###################################
 ##########################################################
-printf "STEP 01) Translate Genes\n" | tee -a "$LOG";
+printf "STEP 01) Translate Coding Genes\n" | tee -a "$LOG";
 
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"01-translate_genes.awk";
 
 REF_GENOME_SEQ="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
-REF_GENOME_ANNOTATIONS="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+REF_GENOME_ANNOTATION="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
 REF_GENES_OUTDIR="$REF_OUTDIR"/"01-Genes";
 mkdir -p "$REF_GENES_OUTDIR";
 REF_PREFIX_GENES="$REF_GENES_OUTDIR"/;
 printf "\t* ""$REF_SPECIES""\n";
 translate_genes "$SCRIPT" "$REF_GENOME_SEQ" \
-	"$REF_GENOME_ANNOTATIONS" "$REF_PREFIX_GENES" "$COMMAND"; 
+	"$REF_GENOME_ANNOTATION" "$REF_PREFIX_GENES" "$COMMAND"; 
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	GENOME_SEQ[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
-	GENOME_ANNOTATIONS[$i]="${SPECIES_DIR[$i]}"/"`ls "${SPECIES_DIR[$i]}" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+	GENOME_ANNOTATION[$i]="${SPECIES_DIR[$i]}"/"`ls "${SPECIES_DIR[$i]}" | egrep '^genome_annotation.g[tf]f(3)?$'`";
 	GENES_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
 	mkdir -p "${GENES_OUTDIR[$i]}";
 	PREFIX_GENES[$i]="${GENES_OUTDIR[$i]}"/;
 	printf "\t* ""${SPECIES_NAME[$i]}""\n";
 	translate_genes "$SCRIPT" "${GENOME_SEQ[$i]}" \
-		"${GENOME_ANNOTATIONS[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
+		"${GENOME_ANNOTATION[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
 done
 
 SUFFIX_GENES[0]="genes-cds.csv";
 SUFFIX_GENES[1]="genes-abnormal_cds.csv";
 SUFFIX_GENES[2]="genes-non_coding.csv";
+SUFFIX_ALL_GENES="all_genes.csv"
 
 ##########################################################
 ###### Build Homology Tables #############################
@@ -498,3 +521,13 @@ rm "$TMP";
 printf "STEP 04) Modify Annotations with respect to Reference Gene Names\n" | tee -a "$LOG";
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"03-modify_annotation.awk";
 
+for ((i = 0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
+	OLD_ANNOTATION="${PREFIX_GENES[$i]}""$SUFFIX_ALL_GENES";
+	NEW_ANNOTATION_DIR="${SPECIES_OUTDIR[$i]}"/"03-Modified_Annotation";
+	mkdir -p "$NEW_ANNOTATION_DIR";
+	NEW_ANNOTATION[$i]="$NEW_ANNOTATION_DIR"/"modified_genome_annotation.csv";
+	modify_annotation "$SCRIPT" "$((i+2))" "$HOMOLO_TAB" \
+		"$OLD_ANNOTATION" "$NEW_ANNOTATION" "$COMMAND";
+done
+
+printf "\nPreparation of Input Data was successful!\n" | tee -a "$LOG";
