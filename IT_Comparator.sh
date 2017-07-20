@@ -561,7 +561,7 @@ for ((i = 0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	mkdir -p "$NEW_ANNOTATION_DIR";
 	NEW_TAB_ANNOTATION[$i]="$NEW_ANNOTATION_DIR"/"modified_genome_annotation.csv";
 	modify_annotation "$SCRIPT" "$((i+2))" "$HOMOLO_TAB" \
-		"$OLD_ANNOTATION" "${NEW_ANNOTATION[$i]}" "$COMMAND";
+		"$OLD_TAB_ANNOTATION" "${NEW_TAB_ANNOTATION[$i]}" "$COMMAND";
 done
 
 ##########################################################
