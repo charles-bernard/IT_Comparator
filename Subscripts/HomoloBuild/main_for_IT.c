@@ -158,13 +158,13 @@ compare(char *filename, struct gene *refList, struct gene *vsList, int wa)
 	  /* Store variables relative to this new best target */
 	  if(score < bestScore) {
 	    bestId = vsId;
-	    cigar = edlibAlignmentToCigar(result.alignment, result.alignmentLength, EDLIB_CIGAR_STANDARD);
+	    cigar = edlibAlignmentToCigar(result.alignment, result.alignmentLength, EDLIB_CIGAR_EXTENDED);
 	  } else if(score == bestScore) {
 	    bestId = concat(bestId, vsId);
 	    cigar = concat(cigar,
 			   edlibAlignmentToCigar(result.alignment,
 						 result.alignmentLength,
-						 EDLIB_CIGAR_STANDARD));
+						 EDLIB_CIGAR_EXTENDED));
 	  }
 	  
 	  if(wa == 1) {
