@@ -18,7 +18,7 @@ file_idx == 1 && FNR > 1 && $column != "." {
 }
 
 file_idx == 2 && FNR == 1 {
-	header = "$1\t$2\t$3\t$4\t$5";
+	header = $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5;
 	printf("%s\n", header);
 }
 
