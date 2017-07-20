@@ -216,12 +216,12 @@ function homolo_build {
 
 	printf "\t * ""$TITLE""\n" | tee -a "$LOG";
 
-	# (set -x; 
-	# 	"$SCRIPT" -r "$REF_FILE" \
-	# 	-c "$VS_FILE" -o "$OUT_FILE" \
-	# 	2>"$TMP_TOOL_STDERR";
-	# ) 2>> "$COMMAND";
-	# printf "\n" >> "$COMMAND";
+	(set -x; 
+		"$SCRIPT" -r "$REF_FILE" \
+		-c "$VS_FILE" -o "$OUT_FILE" \
+		2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
 
 	# Exit if stderr_file not empty
 	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
@@ -277,8 +277,6 @@ function modify_annotation {
 ###########################################################
 ###### I.8 Get Genomic Landscape ##########################
 ###########################################################
-get_landscape "$SCRIPT" "$REF_TAB_ANNOTATION" \
-	"$REF_IT_TAB_FILE" "$REF_LANDSCAPE" "$COMMAND";
 
 function get_landscape {
 	# ARGS
@@ -499,10 +497,10 @@ done
 export -f homolo_build; export -f check_tool_stderr;
 printf "___________________________________________________________\n" >> "$COMMAND"
 printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
-parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
-	::: "$SCRIPT" \
-	::: "${REF_FILE[@]}" :::+ "${TITLE[@]}" :::+ "${VS_FILE[@]}" :::+ "${OUT_FILE[@]}" \
-	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+# parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+# 	::: "$SCRIPT" \
+# 	::: "${REF_FILE[@]}" :::+ "${TITLE[@]}" :::+ "${VS_FILE[@]}" :::+ "${OUT_FILE[@]}" \
+# 	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
 
 ##########################################################
 ##### Check subtables and build reference homology tab ###
@@ -565,7 +563,7 @@ for ((i = 0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 done
 
 ##########################################################
-# Get Genomic Landscape of Genes #########################
+###### Get Genomic Landscape of Genes ####################
 ##########################################################
 printf "STEP 05) Get genomic landscape of each IT\n" | tee -a "$LOG";
 
@@ -582,4 +580,62 @@ for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 		"${IT_TAB_FILE[$i]}" "${LANDSCAPE[$i]}" "$COMMAND";
 done
 
+##########################################################
+###### Prepare ITs Seq and Struct for HomoloBuild ########
+##########################################################
+# TO DO: I was just lazy to integrate this part in step 00 but
+# this would prevent from reading several time the same info
+printf "STEP 06) Prepare list of ITs for HomologSearch\n";
+
+REF_IT_SEQ_DIR="$REF_OUTDIR"/"03-ITs_Seq_and_Struct";
+mkdir -p "$REF_IT_SEQ_DIR";
+REF_IT_SEQ="$REF_IT_SEQ_DIR"/"ITs_seq.csv";
+awk 'BEGIN{ FS="\t"; } NR>1{ print $1 "\t" $5; }' \
+	"$REF_IT_TAB_FILE" > "$REF_IT_SEQ"; 
+REF_IT_STRUCT="$REF_IT_SEQ_DIR"/"ITs_struct.csv";
+awk 'BEGIN{ FS="\t"; } NR>1{ print $1 "\t" $6; }' \
+	"$REF_IT_TAB_FILE" > "$REF_IT_STRUCT";
+
+for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
+	IT_SEQ_DIR[$i]="${SPECIES_OUTDIR[$i]}"/"05-ITs_Seq_and_Struct";
+	mkdir -p "${IT_SEQ_DIR[$i]}";
+	IT_SEQ[$i]="${IT_SEQ_DIR[$i]}"/"ITs_seq.csv";
+	awk 'BEGIN{ FS="\t"; } NR>1{ print $1 "\t" $5; }' \
+		"${IT_TAB_FILE[$i]}" > "${IT_SEQ[$i]}"; 
+	IT_STRUCT[$i]="${IT_SEQ_DIR[$i]}"/"ITs_struct.csv";
+	awk 'BEGIN{ FS="\t"; } NR>1{ print $1 "\t" $6; }' \
+		"${IT_TAB_FILE[$i]}" > "${IT_STRUCT[$i]}"; 
+done
+
 printf "\nPreparation of Input Data was successful!\n" | tee -a "$LOG";
+
+##############################################################
+###### Get Homology of terminators by sequence & structure ###
+##############################################################
+printf "###########################################################\n" | tee -a "$LOG"
+printf "FIND HOMOLOGUOUS ITs\n" | tee -a "$LOG";
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main_for_IT";
+
+for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
+	IT_HOMOLO_DIR[$i]="${SPECIES_OUTDIR[$i]}"/"06-ITs_Homology";
+	mkdir -p "${IT_HOMOLO_DIR[$i]}";
+	IT_HOMOLO_SEQ[$i]="${IT_HOMOLO_DIR[$i]}"/"Sequence_homology.csv";
+	IT_HOMOLO_STRUCT[$i]="${IT_HOMOLO_DIR[$i]}"/"Structure_homology.csv";
+done
+
+printf "STEP 00) Get Sequence Homology\n" | tee -a "$LOG";
+printf "___________________________________________________________\n" >> "$COMMAND"
+printf "BUILD IT SEQUENCE HOMOLOGY:\n" >> "$COMMAND";
+parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+	::: "$SCRIPT" :::+ "$REF_IT_SEQ" \
+	::: "${SPECIES_NAME[@]}" :::+ "${IT_SEQ[@]}" :::+ "${IT_HOMOLO_SEQ[@]}" \
+	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+
+printf "STEP 01) Get Secondary Structure Homology\n" | tee -a "$LOG";
+printf "___________________________________________________________\n" >> "$COMMAND"
+printf "BUILD IT STRUCTURE HOMOLOGY:\n" >> "$COMMAND";
+parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+	::: "$SCRIPT" :::+ "$REF_IT_STRUCT" \
+	::: "${SPECIES_NAME[@]}" :::+ "${IT_STRUCT[@]}" :::+ "${IT_HOMOLO_STRUCT[@]}" \
+	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
