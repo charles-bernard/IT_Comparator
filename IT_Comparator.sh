@@ -236,6 +236,9 @@ function correct_table {
 	local COMMAND="$3";
 	local OUTFILE="$INFILE""_corrected";
 
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "CORRECT TABLE:\n" >> "$COMMAND";
+
 	(set -x; 
 		awk -f "$SCRIPT" "$INFILE" \
 		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
@@ -256,10 +259,40 @@ function modify_annotation {
 	local HOMOLO_TAB="$3"; local OLD_ANNOTATION="$4"; 
 	local OUTFILE="$5"; local COMMAND="$6";
 
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "MODIFY ANNOTATION:\n" >> "$COMMAND";
+
 	(set -x;
 		awk -v column="$COL" \
 		-f "$SCRIPT" \
 		"$HOMOLO_TAB" "$OLD_ANNOTATION" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
+###### I.8 Get Genomic Landscape ##########################
+###########################################################
+get_landscape "$SCRIPT" "$REF_TAB_ANNOTATION" \
+	"$REF_IT_TAB_FILE" "$REF_LANDSCAPE" "$COMMAND";
+
+function get_landscape {
+	# ARGS
+	local SCRIPT="$1"; BREAK_IT=$2;
+	local ANNOTATION="$3"; local IT_FILE="$4"; 
+	local OUTFILE="$5"; local COMMAND="$6";
+
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "GET GENOMIC LANDSCAPE:\n" >> "$COMMAND";
+
+	(set -x;
+		awk -v breakIT=$BREAK_IT \
+		-f "$SCRIPT" \
+		"$ANNOTATION" "$IT_FILE" \
 		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
@@ -390,13 +423,13 @@ printf "STEP 00) list_ITs.gff to tabular file\n" | tee -a "$LOG";
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"00-gff_to_tab.awk";
 
 REF_IT_GFF="$REF_DIR"/"list_ITs.gff";
-REF_TAB_FILE="$REF_OUTDIR"/"00-list_ITs.csv";
-gff_to_tab "$SCRIPT" "$REF_IT_GFF" "$REF_TAB_FILE" "$COMMAND";
+REF_IT_TAB_FILE="$REF_OUTDIR"/"00-list_ITs.csv";
+gff_to_tab "$SCRIPT" "$REF_IT_GFF" "$REF_IT_TAB_FILE" "$COMMAND";
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	IT_GFF="${SPECIES_DIR[$i]}"/"list_ITs.gff";
-	TAB_FILE[$i]="${SPECIES_OUTDIR[$i]}"/"00-list_ITs.csv";
-	gff_to_tab "$SCRIPT" "$IT_GFF" "${TAB_FILE[$i]}" "$COMMAND";
+	IT_TAB_FILE[$i]="${SPECIES_OUTDIR[$i]}"/"00-list_ITs.csv";
+	gff_to_tab "$SCRIPT" "$IT_GFF" "${IT_TAB_FILE[$i]}" "$COMMAND";
 done
 
 ##########################################################
@@ -407,23 +440,23 @@ printf "STEP 01) Translate Coding Genes\n" | tee -a "$LOG";
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"01-translate_genes.awk";
 
 REF_GENOME_SEQ="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
-REF_GENOME_ANNOTATION="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+REF_GFF_ANNOTATION="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f(3)?$'`";
 REF_GENES_OUTDIR="$REF_OUTDIR"/"01-Genes";
 mkdir -p "$REF_GENES_OUTDIR";
 REF_PREFIX_GENES="$REF_GENES_OUTDIR"/;
 printf "\t* ""$REF_SPECIES""\n";
 translate_genes "$SCRIPT" "$REF_GENOME_SEQ" \
-	"$REF_GENOME_ANNOTATION" "$REF_PREFIX_GENES" "$COMMAND"; 
+	"$REF_GFF_ANNOTATION" "$REF_PREFIX_GENES" "$COMMAND"; 
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	GENOME_SEQ[$i]="${SPECIES_DIR[$i]}"/"`ls "$REF_DIR" | egrep '^genome_sequence.fa(sta)?$'`";
-	GENOME_ANNOTATION[$i]="${SPECIES_DIR[$i]}"/"`ls "${SPECIES_DIR[$i]}" | egrep '^genome_annotation.g[tf]f(3)?$'`";
+	GFF_ANNOTATION[$i]="${SPECIES_DIR[$i]}"/"`ls "${SPECIES_DIR[$i]}" | egrep '^genome_annotation.g[tf]f(3)?$'`";
 	GENES_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
 	mkdir -p "${GENES_OUTDIR[$i]}";
 	PREFIX_GENES[$i]="${GENES_OUTDIR[$i]}"/;
 	printf "\t* ""${SPECIES_NAME[$i]}""\n";
 	translate_genes "$SCRIPT" "${GENOME_SEQ[$i]}" \
-		"${GENOME_ANNOTATION[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
+		"${GFF_ANNOTATION[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
 done
 
 SUFFIX_GENES[0]="genes-cds.csv";
@@ -434,7 +467,7 @@ SUFFIX_ALL_GENES="all_genes.csv"
 ##########################################################
 ###### Build Homology Tables #############################
 ##########################################################
-printf "STEP 02) Build Homology Table of Genes\n" | tee -a "$LOG";
+printf "STEP 02) Build Homology Tables of Genes\n" | tee -a "$LOG";
 
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main";
 K=0; N=0;
@@ -474,7 +507,7 @@ parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
 ##########################################################
 ##### Check subtables and build reference homology tab ###
 ##########################################################
-printf "STEP 03) Correct tables and build reference homology table\n" | tee -a "$LOG";
+printf "STEP 03) Correct Tables and build Reference Table\n" | tee -a "$LOG";
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"02-filter_homolotab.awk";
 
 for(( i=0; i < K; i++ )); do
@@ -519,15 +552,34 @@ rm "$TMP";
 # Modify Species Annotation according to Reference Names #
 ##########################################################
 printf "STEP 04) Modify Annotations with respect to Reference Gene Names\n" | tee -a "$LOG";
+
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"03-modify_annotation.awk";
 
 for ((i = 0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
-	OLD_ANNOTATION="${PREFIX_GENES[$i]}""$SUFFIX_ALL_GENES";
+	OLD_TAB_ANNOTATION="${PREFIX_GENES[$i]}""$SUFFIX_ALL_GENES";
 	NEW_ANNOTATION_DIR="${SPECIES_OUTDIR[$i]}"/"03-Modified_Annotation";
 	mkdir -p "$NEW_ANNOTATION_DIR";
-	NEW_ANNOTATION[$i]="$NEW_ANNOTATION_DIR"/"modified_genome_annotation.csv";
+	NEW_TAB_ANNOTATION[$i]="$NEW_ANNOTATION_DIR"/"modified_genome_annotation.csv";
 	modify_annotation "$SCRIPT" "$((i+2))" "$HOMOLO_TAB" \
-		"$OLD_ANNOTATION" "$NEW_ANNOTATION" "$COMMAND";
+		"$OLD_ANNOTATION" "${NEW_ANNOTATION[$i]}" "$COMMAND";
+done
+
+##########################################################
+# Get Genomic Landscape of Genes #########################
+##########################################################
+printf "STEP 05) Get genomic landscape of each IT\n" | tee -a "$LOG";
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"04-get_genomic_landscape.awk";
+
+REF_TAB_ANNOTATION="$REF_PREFIX_GENES""$SUFFIX_ALL_GENES";
+REF_LANDSCAPE="$REF_OUTDIR"/"02-ITs_genomic_landscape.csv";
+get_landscape "$SCRIPT" 1 "$REF_TAB_ANNOTATION" \
+	"$REF_IT_TAB_FILE" "$REF_LANDSCAPE" "$COMMAND";
+
+for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
+	LANDSCAPE[$i]="${SPECIES_OUTDIR[$i]}"/"04-ITs_genomic_landscape.csv";
+	get_landscape "$SCRIPT" 0 "${NEW_TAB_ANNOTATION[$i]}" \
+		"${IT_TAB_FILE[$i]}" "${LANDSCAPE[$i]}" "$COMMAND";
 done
 
 printf "\nPreparation of Input Data was successful!\n" | tee -a "$LOG";
