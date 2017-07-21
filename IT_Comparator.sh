@@ -10,7 +10,7 @@ cat <<WELCOME_MESSAGE
 You are using IT Comparator!
 
 Let us compare the genomic landscape/context of 
-homologuous ITs among related bacterial species!
+homologous ITs among related bacterial species!
 
 WELCOME_MESSAGE
 
@@ -213,12 +213,15 @@ function homolo_build {
 	local TITLE="$3"; local VS_FILE="$4";
 	local OUT_FILE="$5"; local COMMAND="$6";
 	local TMP_TOOL_STDERR="$7"; local LOG="$8";
+	local MODE="$9"; 
+	local OPTA="${10:-""}"; local OPTB="${11:-""}"; 
 
 	printf "\t * ""$TITLE""\n" | tee -a "$LOG";
 
 	(set -x; 
 		"$SCRIPT" -r "$REF_FILE" \
 		-c "$VS_FILE" -o "$OUT_FILE" \
+		-m "$MODE" $OPTA $OPTB \
 		2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
@@ -467,7 +470,7 @@ SUFFIX_ALL_GENES="all_genes.csv"
 ##########################################################
 printf "STEP 02) Build Homology Tables of Genes\n" | tee -a "$LOG";
 
-SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"homoloBuild";
 K=0; N=0;
 
 printf "   * $REF_SPECIES _VS_ OTHER SPECIES\n";
@@ -497,10 +500,10 @@ done
 export -f homolo_build; export -f check_tool_stderr;
 printf "___________________________________________________________\n" >> "$COMMAND"
 printf "BUILD GENES HOMOLOGY:\n" >> "$COMMAND";
-# parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+# parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} \
 # 	::: "$SCRIPT" \
 # 	::: "${REF_FILE[@]}" :::+ "${TITLE[@]}" :::+ "${VS_FILE[@]}" :::+ "${OUT_FILE[@]}" \
-# 	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+# 	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG" :::+ "NW" :::+ "-a";
 
 ##########################################################
 ##### Check subtables and build reference homology tab ###
@@ -613,9 +616,9 @@ printf "\nPreparation of Input Data was successful!\n" | tee -a "$LOG";
 ###### Get Homology of terminators by sequence & structure ###
 ##############################################################
 printf "###########################################################\n" | tee -a "$LOG"
-printf "FIND HOMOLOGUOUS ITs\n" | tee -a "$LOG";
+printf "FIND HOMOLOGOUS ITs\n" | tee -a "$LOG";
 
-SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"main_for_IT";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"homoloBuild";
 
 for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	IT_HOMOLO_DIR[$i]="${SPECIES_OUTDIR[$i]}"/"06-ITs_Homology";
@@ -627,15 +630,19 @@ done
 printf "STEP 00) Get Sequence Homology\n" | tee -a "$LOG";
 printf "___________________________________________________________\n" >> "$COMMAND"
 printf "BUILD IT SEQUENCE HOMOLOGY:\n" >> "$COMMAND";
-parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} {9} \
 	::: "$SCRIPT" :::+ "$REF_IT_SEQ" \
 	::: "${SPECIES_NAME[@]}" :::+ "${IT_SEQ[@]}" :::+ "${IT_HOMOLO_SEQ[@]}" \
-	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG" :::+ "HW";
 
 printf "STEP 01) Get Secondary Structure Homology\n" | tee -a "$LOG";
 printf "___________________________________________________________\n" >> "$COMMAND"
 printf "BUILD IT STRUCTURE HOMOLOGY:\n" >> "$COMMAND";
-parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} \
+parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} {9} \
 	::: "$SCRIPT" :::+ "$REF_IT_STRUCT" \
 	::: "${SPECIES_NAME[@]}" :::+ "${IT_STRUCT[@]}" :::+ "${IT_HOMOLO_STRUCT[@]}" \
-	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG";
+	::: "$COMMAND" :::+ "$TMP_TOOL_STDERR" :::+ "$LOG" :::+ "HW";
+
+##############################################################
+###### Get Homology of terminators by genomic landscape ######
+##############################################################
