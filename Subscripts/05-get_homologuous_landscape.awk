@@ -21,8 +21,8 @@ function get_break_event(attribute) {
 	return break_event;
 }
 
-function series_to_gene_array(n, series, type, t) {
-	if(n > 5) { limit = 5; } else { limit = n; }
+function series_to_gene_array(max_g, n, series, type, t) {
+	if(n > max_g) { limit = max_g; } else { limit = n; }
 	split(series, gene_attribute, "|");
 
 	for(i = 1; i <= limit; i++) {
@@ -91,7 +91,7 @@ function build_reference_code(max_g, n, type, direction, break_event) {
 	return code_string;
 }
 
-function initialize_vs_code(t, max_g, n, type, direction, break_event) {
+function initialize_vs_code(max_g, n, type, direction, break_event, t) {
 	if(n > max_g) {
 		break_event = max_g;
 	}
@@ -133,22 +133,26 @@ function initialize_vs_code(t, max_g, n, type, direction, break_event) {
 	return code_string;
 }
 
-function find_match(contrary_series, type, ref_code, 
-	ref_id, ref_genes, ref_n, 
-	vs_id, vs_genes, vs_n, vs_code, t) {
+function find_match(max_g, contrary_series, type, 
+	ref_code, ref_id, ref_genes, ref_n, 
+	vs_code, vs_id, vs_genes, vs_n, t) {
 
 	match_tag = "";
 	match_code = "";
+
 	k = 0;
-	if(ref_n > 5) { ref_n = 5; }
+
+	if(ref_n > max_g) { ref_n = max_g; }
 
 	for(cur_t = 0; cur_t < t; cur_t++) {
 
 		nb_g_present = 0;
 		nb_g_ordered = 0;
 		nb_g_oriented = 0;
+
 		code_string = vs_code[cur_t];
-		if(vs_n[cur_t] > 5) { vs_n[cur_t] = 5; }
+
+		if(vs_n[cur_t] > max_g) { vs_n[cur_t] = max_g; }
 
 		for(i = 0; i < ref_n; i++) { 
 			ref_char = substr(ref_code, i+2, 1);
@@ -157,15 +161,16 @@ function find_match(contrary_series, type, ref_code,
 			if(type == "af") {
 				ref_idx = i;
 			} else if(type == "bf" ) {
-				ref_idx = ref_n-i-1;
+				ref_idx = ref_n - i - 1;
 			}
 			for(j = 0; j < vs_n[cur_t]; j++) {
 
 				if(type == "af") {
 					idx = j;
 				} else if(type == "bf" ) {
-					idx = vs_n[cur_t]-j-1;
+					idx = vs_n[cur_t] - j - 1;
 				}	
+
 				if(("H:" ref_genes[ref_idx]) == vs_genes[cur_t][idx]) {
 
 					nb_g_present++;
@@ -189,7 +194,6 @@ function find_match(contrary_series, type, ref_code,
 
 					code_string = substr(code_string, 1, j+1) \
 						cur_char substr(code_string, j+3);
-
 				}
 			}
 		}
@@ -227,12 +231,11 @@ BEGIN {
 	ref_bf_genes[0] = ref_af_genes[0] = "";
 
 	header = "ref_ID" \
-		"\tref_BEFORE_code" \
+		"\tref_code" \
 		"\tBEFORE-vs-BEFORE_vsID_match" \
 		"\tBEFORE-vs-BEFORE_vsID_match_code" \
 		"\tBEFORE-vs-AFTER_vsID_match" \
 		"\tBEFORE-vs-AFTER_vsID_match_code" \
-		"\tref_AFTER_code" \
 		"\tAFTER-vs-AFTER_vsID_match" \
 		"\tAFTER-vs-AFTER_vsID_match_code" \
 		"\tAFTER-vs-BEFORE_vsID_match" \
@@ -295,17 +298,23 @@ file_idx == 1 && FNR > 1 {
 	n_g_bf[t] = $9;
 	bf_series_tag = $10;
 	bf_break_event[t] = get_break_event($11);
-	# The function below fill the array bf_genes[t][@]
-	series_to_gene_array(n_g_bf[t], bf_series_tag, "bf", t);
-	bf_code[t] = initialize_vs_code(t, max_g, n_g_bf[t], "bf", bf_direction[t], bf_break_event[t]);
+
+	# The function below fills the array bf_genes[t][@]
+	series_to_gene_array(max_g, n_g_bf[t], bf_series_tag, "bf", t);
+
+	bf_code[t] = initialize_vs_code(max_g, n_g_bf[t], 
+		"bf", bf_direction[t], bf_break_event[t], t);
 
 	af_direction[t] = direction[$8]["af"];
 	n_g_af[t] = $13;
 	af_series_tag = $14;
 	af_break_event[t] = get_break_event($15);
+
 	# The function below fill the array af_genes[t][@]
-	series_to_gene_array(n_g_af[t], af_series_tag, "af", t);
-	af_code[t] = initialize_vs_code(t, max_g, n_g_af[t], "af", af_direction[t], af_break_event[t]);
+	series_to_gene_array(max_g, n_g_af[t], af_series_tag, "af", t);
+
+	af_code[t] = initialize_vs_code(max_g, n_g_af[t], 
+		"af", af_direction[t], af_break_event[t], t);
 
 	t++;
 }
@@ -317,40 +326,46 @@ file_idx == 2 && FNR > 1 {
 	ref_n_g_bf = $9;
 	ref_bf_series_tag = $10;
 	ref_bf_break_event = get_break_event($11);
+
 	# The function below fill the array ref_bf_genes[t][@]
-	series_to_gene_array(ref_n_g_bf, ref_bf_series_tag, "bf", 0);
-	ref_bf_code = build_reference_code(max_g, ref_n_g_bf, "bf", ref_bf_direction, ref_bf_break_event);
+	series_to_gene_array(max_g, ref_n_g_bf, ref_bf_series_tag, "bf", 0);
+
+	ref_bf_code = build_reference_code(max_g, ref_n_g_bf, 
+		"bf", ref_bf_direction, ref_bf_break_event);
 
 	ref_af_direction = direction[$8]["af"];
 	ref_n_g_af = $13;
 	ref_af_series_tag = $14;
 	ref_af_break_event = get_break_event($15);
+
 	# The function below fill the array ref_af_genes[t][@]
-	series_to_gene_array(ref_n_g_af, ref_af_series_tag, "af", 0);
-	ref_af_code = build_reference_code(max_g, ref_n_g_af, "af", ref_af_direction, ref_af_break_event);
+	series_to_gene_array(max_g, ref_n_g_af, ref_af_series_tag, "af", 0);
 
-	match_bf_bf_fields = find_match(0, "bf", ref_bf_code, 
-		ref_id, ref_bf_genes, ref_n_g_bf, 
-		id, bf_genes, n_g_bf, bf_code, t);
+	ref_af_code = build_reference_code(max_g, ref_n_g_af, 
+		"af", ref_af_direction, ref_af_break_event);
 
-	match_bf_af_fields = find_match(1, "bf", ref_bf_code,
-		ref_id, ref_bf_genes, ref_n_g_bf, 
-		id, af_genes, n_g_af, af_code, t);
+	## FIND MATCHES ##
+	match_bf_bf_fields = find_match(max_g, 0, "bf", 
+		ref_bf_code, ref_id, ref_bf_genes, ref_n_g_bf, 
+		bf_code, id, bf_genes, n_g_bf, t);
 
-	match_af_af_fields = find_match(0, "af", ref_af_code, 
-		ref_id, ref_af_genes, ref_n_g_af, 
-		id, af_genes, n_g_af, af_code, t);
+	match_bf_af_fields = find_match(max_g, 1, "bf", 
+		ref_bf_code, ref_id, ref_bf_genes, ref_n_g_bf, 
+		af_code, id, af_genes, n_g_af, t);
 
-	match_af_bf_fields = find_match(1, "af", ref_af_code,
-		ref_id, ref_af_genes, ref_n_g_af, \
-		id, bf_genes, n_g_bf, bf_code, t);
+	match_af_af_fields = find_match(max_g, 0, "af",
+		ref_af_code, ref_id, ref_af_genes, ref_n_g_af, 
+		af_code, id, af_genes, n_g_af, t);
+
+	match_af_bf_fields = find_match(max_g, 1, "af", 
+		ref_af_code, ref_id, ref_af_genes, ref_n_g_af, 
+		bf_code, id, bf_genes, n_g_bf, t);
 	
-	printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+	printf("%s\t%s\t%s\t%s\t%s\t%s\n", 
 		ref_id, 
-		ref_bf_code,
+		ref_bf_code ref_af_code,
 		match_bf_bf_fields,
 		match_bf_af_fields,
-		ref_af_code,
 		match_af_af_fields,
 		match_af_bf_fields);
 
