@@ -305,7 +305,7 @@ file_idx == 1 && FNR > 1 {
 	bf_code[t] = initialize_vs_code(max_g, n_g_bf[t], 
 		"bf", bf_direction[t], bf_break_event[t], t);
 
-	af_direction[t] = direction[$8]["af"];
+	af_direction[t] = direction[$12]["af"];
 	n_g_af[t] = $13;
 	af_series_tag = $14;
 	af_break_event[t] = get_break_event($15);
@@ -333,7 +333,7 @@ file_idx == 2 && FNR > 1 {
 	ref_bf_code = build_reference_code(max_g, ref_n_g_bf, 
 		"bf", ref_bf_direction, ref_bf_break_event);
 
-	ref_af_direction = direction[$8]["af"];
+	ref_af_direction = direction[$12]["af"];
 	ref_n_g_af = $13;
 	ref_af_series_tag = $14;
 	ref_af_break_event = get_break_event($15);
