@@ -112,7 +112,7 @@ concat(const char *s1, const char *s2)
 
 /* This is the core function */
 void
-  compare(EdlibAlignMode mode, char *filename,
+compare(EdlibAlignMode mode, char *filename,
 	  struct gene *refList, struct gene *vsList,
 	  int avoidRedundance, int writeAlignment)
 {
@@ -126,9 +126,11 @@ void
   
   int score, bestScore;
   float scoreLenRatio;
+  
   int bestPosition;
   int bestAlignmentLength;
   unsigned char *bestAlignment = (unsigned char *)malloc(sizeof(unsigned char));
+  
   char *cigar = (char *)malloc(sizeof(char));
 
   FILE *f = fopen(filename, "w");
@@ -165,7 +167,7 @@ void
 
 	// NB the major difference with main.c (for genes) is the "HW" infix EDLIB_MODE
 	EdlibAlignResult result = edlibAlign(refSeq, refLen, vsSeq, vsLen,
-					     edlibNewAlignConfig(-1, EDLIB_MODE_HW, EDLIB_TASK_PATH));
+					     edlibNewAlignConfig(-1, mode, EDLIB_TASK_PATH));
 	score = result.editDistance;
 	
 	if(result.alignment && score <= bestScore) {
