@@ -113,8 +113,8 @@ concat(const char *s1, const char *s2)
 /* This is the core function */
 void
 compare(EdlibAlignMode mode, char *filename,
-	  struct gene *refList, struct gene *vsList,
-	  int avoidRedundance, int writeAlignment)
+	struct gene *refList, struct gene *vsList,
+	int avoidRedundance, int writeAlignment)
 {
   int g = 1; int ng = lenList(refList);
   char *refSeq, *vsSeq, *bestSeq;
@@ -252,7 +252,7 @@ main(int argc, char **argv)
   struct gene *refListGenes, *vsListGenes;
 
   char *method = "NW";
-  EdlibAlignMode mode;
+  EdlibAlignMode mode = EDLIB_MODE_NW;
 
   int writeAlignment = 0, avoidRedundance = 0;
   
