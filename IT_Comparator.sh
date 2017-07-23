@@ -216,7 +216,7 @@ function homolo_build {
 	local MODE="$9"; 
 	local OPTA="${10:-""}"; local OPTB="${11:-""}"; 
 
-	printf "\t * ""$TITLE""\n" | tee -a "$LOG";
+	printf "\t* ""$TITLE""\n" | tee -a "$LOG";
 
 	(set -x; 
 		"$SCRIPT" -r "$REF_FILE" \
@@ -294,6 +294,30 @@ function get_landscape {
 		awk -v breakIT=$BREAK_IT \
 		-f "$SCRIPT" \
 		"$ANNOTATION" "$IT_FILE" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
+###### I.9 Get Homology of Genomic Landscape ##############
+###########################################################
+
+function get_homolo_landscape {
+	# Args
+	local SCRIPT="$1"; local LANDSCAPE="$2";
+	local REF_LANDSCAPE="$3"; local OUTFILE="$4";
+	local COMMAND="$5";
+
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "GET GENOMIC LANDSCAPE HOMOLOGY:\n" >> "$COMMAND";
+
+	(set -x;
+		awk -f "$SCRIPT" \
+		"$LANDSCAPE" "$REF_LANDSCAPE" \
 		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
@@ -445,7 +469,7 @@ REF_GFF_ANNOTATION="$REF_DIR"/"`ls "$REF_DIR" | egrep '^genome_annotation.g[tf]f
 REF_GENES_OUTDIR="$REF_OUTDIR"/"01-Genes";
 mkdir -p "$REF_GENES_OUTDIR";
 REF_PREFIX_GENES="$REF_GENES_OUTDIR"/;
-printf "\t* ""$REF_SPECIES""\n";
+printf "\t* ""$REF_SPECIES""\n" | tee -a "$LOG";
 translate_genes "$SCRIPT" "$REF_GENOME_SEQ" \
 	"$REF_GFF_ANNOTATION" "$REF_PREFIX_GENES" "$COMMAND"; 
 
@@ -455,7 +479,7 @@ for (( i=0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	GENES_OUTDIR[$i]="${SPECIES_OUTDIR[$i]}"/"01-Genes";
 	mkdir -p "${GENES_OUTDIR[$i]}";
 	PREFIX_GENES[$i]="${GENES_OUTDIR[$i]}"/;
-	printf "\t* ""${SPECIES_NAME[$i]}""\n";
+	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
 	translate_genes "$SCRIPT" "${GENOME_SEQ[$i]}" \
 		"${GFF_ANNOTATION[$i]}" "${PREFIX_GENES[$i]}" "$COMMAND"; 
 done
@@ -558,9 +582,7 @@ SCRIPT="$SCRIPT_PATH"/"Subscripts"/"03-modify_annotation.awk";
 
 for ((i = 0; i<${#SPECIES_OUTDIR[@]}; i++ )); do
 	OLD_TAB_ANNOTATION="${PREFIX_GENES[$i]}""$SUFFIX_ALL_GENES";
-	NEW_ANNOTATION_DIR="${SPECIES_OUTDIR[$i]}"/"03-Modified_Annotation";
-	mkdir -p "$NEW_ANNOTATION_DIR";
-	NEW_TAB_ANNOTATION[$i]="$NEW_ANNOTATION_DIR"/"modified_genome_annotation.csv";
+	NEW_TAB_ANNOTATION[$i]="${SPECIES_OUTDIR[$i]}"/"03-Modified_genome_annotation.csv";
 	modify_annotation "$SCRIPT" "$((i+2))" "$HOMOLO_TAB" \
 		"$OLD_TAB_ANNOTATION" "${NEW_TAB_ANNOTATION[$i]}" "$COMMAND";
 done
@@ -646,3 +668,13 @@ parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} {9} \
 ##############################################################
 ###### Get Homology of terminators by genomic landscape ######
 ##############################################################
+printf "STEP 02) Get Genomic Landscape Homology\n" | tee -a "$LOG";
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"05-get_homologuous_landscape.awk";
+
+for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
+	IT_HOMOLO_LANDSCAPE[$i]="${IT_HOMOLO_DIR[$i]}"/"Genomic_landscape_homology"; 
+	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
+	get_homolo_landscape "$SCRIPT" "${LANDSCAPE[$i]}" \
+		"$REF_LANDSCAPE" "${IT_HOMOLO_LANDSCAPE[$i]}" "$COMMAND";
+done
