@@ -300,7 +300,7 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 					bf_present = ";Bf-NgPresent/totNg=" tag[i][j_present][k];
 					bf_order = ";Bf-NgOrdered/totNg=" tag[i][j_order][k];
 					bf_orientation = ";Bf-NgOriented/totNg=" tag[i][j_orientation][k];
-					if(k_other_side[cur_id]) {
+					if(k_other_side[cur_id] != "") {
 						if(i == 0) { i_other_side = 2; } else { i_other_side = 3; }
 						af_code_ = ";Af-code=" tag[i_other_side][j_code][k_other_side[cur_id]];
 						af_score = ";Af-Score=" tag[i_other_side][j_score][k_other_side[cur_id]];
@@ -471,10 +471,11 @@ file_idx == 2 && FNR > 1 {
 		ref_af_code, ref_id, ref_af_genes, ref_n_g_af, 
 		bf_code, id, bf_genes, n_g_bf, t);
 
+
 	attribute = assemble_matches(ref_bf_code ref_af_code,
 		match_bf_bf, match_bf_af,
 		match_af_af, match_af_bf);
-	
+
 	printf("%s\t%s\t%s\n", 
 		ref_id, 
 		ref_bf_code ref_af_code,
