@@ -204,7 +204,6 @@ function translate_genes {
 ###########################################################
 ###### I.5 Build Homology Tables ##########################
 ###########################################################
-
 function homolo_build {
 	# build homolo table between ref species and target species
 
@@ -280,7 +279,6 @@ function modify_annotation {
 ###########################################################
 ###### I.8 Get Genomic Landscape ##########################
 ###########################################################
-
 function get_landscape {
 	# ARGS
 	local SCRIPT="$1"; BREAK_IT=$2;
@@ -305,7 +303,6 @@ function get_landscape {
 ###########################################################
 ###### I.9 Get Homology of Genomic Landscape ##############
 ###########################################################
-
 function get_homolo_landscape {
 	# Args
 	local SCRIPT="$1"; local LANDSCAPE="$2";
@@ -326,6 +323,28 @@ function get_homolo_landscape {
 	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
 }
 
+###########################################################
+###### I.10 Join Homology Info ############################
+###########################################################
+function join_homolo_info {
+	#Args
+	local SCRIPT="$1"; local SEQ_FILE="$2";
+	local STRUCT_FILE="$3"; local LANDSCAPE_FILE="$4";
+	local OUTFILE="$5"; local COMMAND="$6";
+
+	printf "___________________________________________________________\n" >> "$COMMAND"
+	printf "JOIN IT HOMOLOGY INFO:\n" >> "$COMMAND";
+
+	(set -x;
+		awk -f "$SCRIPT" "$SEQ_FILE" \
+		"$STRUCT_FILE" "$LANDSCAPE_FILE" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
 
 ###########################################################
 # II. PARAMETERS FOR THE PIPELINE
@@ -677,4 +696,19 @@ for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
 	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
 	get_homolo_landscape "$SCRIPT" "${LANDSCAPE[$i]}" \
 		"$REF_LANDSCAPE" "${IT_HOMOLO_LANDSCAPE[$i]}" "$COMMAND";
+done
+
+##############################################################
+###### Cross check info on homology ##########################
+##############################################################
+printf "STEP 03) Cross-check info on IT homology\n" | tee -a "$LOG";
+
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"06-join_homology_info.awk";
+
+for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
+	IT_HOMOLO_JOIN[$i]="${IT_HOMOLO_DIR[$i]}"/"Joined_homology_info.csv"; 
+	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
+	join_homolo_info "$SCRIPT" "${IT_HOMOLO_SEQ[$i]}" \
+		"${IT_HOMOLO_STRUCT[$i]}" "${IT_HOMOLO_LANDSCAPE[$i]}" \
+		"${IT_HOMOLO_JOIN[$i]}" "$COMMAND";
 done

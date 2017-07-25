@@ -284,48 +284,48 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 	}
 
 	# Build final tags
-	attribute = "";
+	line = "";
 	for(i = 0; i < 4; i++) {
 		for(k = 0; k < ntags[i]; k++) {
 			cur_id = tag[i][j_id][k];
-			id_tag = flipped_tag = "";
+			cur_line = id_ = flip = "";
 			bf_code_ = bf_score = bf_present = bf_order = bf_orientation = "";
 			af_code_ = af_score = af_present = af_order = af_orientation = "";
 			if(!already_visited[cur_id]) {
-				id_tag = "ID=" cur_id;
-				flipped_tag = ";Flipped=" tag[i][j_flip][k];
+				id_ = cur_id;
+				flip = tag[i][j_flip][k];
 				if(i == 0 || i == 1) {
-					bf_code_ = ";Bf-code=" tag[i][j_code][k];
-					bf_score = ";Bf-Score=" tag[i][j_score][k];
-					bf_present = ";Bf-NgPresent/totNg=" tag[i][j_present][k];
-					bf_order = ";Bf-NgOrdered/totNg=" tag[i][j_order][k];
-					bf_orientation = ";Bf-NgOriented/totNg=" tag[i][j_orientation][k];
+					bf_code_ = tag[i][j_code][k];
+					bf_score = tag[i][j_score][k];
+					bf_present = tag[i][j_present][k];
+					bf_order = tag[i][j_order][k];
+					bf_orientation = tag[i][j_orientation][k];
 					if(k_other_side[cur_id] != "") {
 						if(i == 0) { i_other_side = 2; } else { i_other_side = 3; }
-						af_code_ = ";Af-code=" tag[i_other_side][j_code][k_other_side[cur_id]];
-						af_score = ";Af-Score=" tag[i_other_side][j_score][k_other_side[cur_id]];
-						af_present = ";Af-NgPresent/totNg=" tag[i_other_side][j_present][k_other_side[cur_id]];
-						af_order = ";Af-NgOrdered/totNg=" tag[i_other_side][j_order][k_other_side[cur_id]];
-						af_orientation = ";Af-NgOriented/totNg=" tag[i_other_side][j_orientation][k_other_side[cur_id]];
+						af_code_ = tag[i_other_side][j_code][k_other_side[cur_id]];
+						af_score = tag[i_other_side][j_score][k_other_side[cur_id]];
+						af_present = tag[i_other_side][j_present][k_other_side[cur_id]];
+						af_order = tag[i_other_side][j_order][k_other_side[cur_id]];
+						af_orientation = tag[i_other_side][j_orientation][k_other_side[cur_id]];
 					}
 				} else if(i == 2 || i == 3) {
-					af_code_ = ";Af-code=" tag[i][j_code][k];
-					af_score = ";Af-Score=" tag[i][j_score][k];
-					af_present = ";Af-NgPresent/totNg=" tag[i][j_present][k];
-					af_order = ";Af-NgOrdered/totNg=" tag[i][j_order][k];
-					af_orientation = ";Af-NgOriented/totNg=" tag[i][j_orientation][k];
+					af_code_ = tag[i][j_code][k];
+					af_score = tag[i][j_score][k];
+					af_present = tag[i][j_present][k];
+					af_order = tag[i][j_order][k];
+					af_orientation = tag[i][j_orientation][k];
 				}
 			}
 			already_visited[cur_id] = 1;
-			cur_attribute = id_tag flipped_tag \
-				bf_code_ af_code_ \
-				bf_score af_score \
-				bf_present bf_order bf_orientation \
-				af_present af_order af_orientation;
-			if(!attribute) {
-				attribute = cur_attribute;
-			} else if(cur_attribute) {
-				attribute = attribute "|" cur_attribute;
+
+			cur_line = ref_id "\t" ref_bf_code ref_af_code "\t" \
+				id_ "\t" flip "\t" bf_code_ "\t" af_code_ "\t" bf_score "\t" af_score "\t" \
+				bf_present "\t" bf_order "\t" bf_orientation "\t" \
+				af_present "\t" af_order "\t" af_orientation;
+			if(!line && id_) {
+				line = cur_line;
+			} else if(id_) {
+				line = line "\n" cur_line;
 			}
 		}
 	}
@@ -333,7 +333,10 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 	delete tag;
 	delete ntags;
 	delete already_visited;
-	return attribute;
+	if(line) {
+		return line;
+	}
+	return ref_id "\t" ref_bf_code ref_af_code "\t\t\t\t\t\t\t\t\t\t\t\t"
 }
 
 
@@ -344,12 +347,20 @@ BEGIN {
 	# counter for IT
 	t = 0;
 
-	bf_genes[0][0] = af_genes[0][0] = "";
-	ref_bf_genes[0] = ref_af_genes[0] = "";
-
-	header = "ref_ID" \
-		"\tref_code" \
-		"\tvs_attributes"
+	header = "Ref. ID" \
+		"\tRef. Code" \
+		"\tVs ID" \
+		"\tis Vs Flipped?" \
+		"\tVs Bf Code" \
+		"\tVs Af Code" \
+		"\tVs Bf Score" \
+		"\tVs Af Score" \
+		"\tVs Bf NgPresent/totNg" \
+		"\tVs Bf NgOrdered/totNg" \
+		"\tVs Bf NgOriented/totNg" \
+		"\tVs Af NgPresent/totNg" \
+		"\tVs Af NgOrdered/totNg" \
+		"\tVs Af NgOriented/totNg";
 	printf("%s\n", header);
 
 	max_g = 5;
@@ -472,14 +483,11 @@ file_idx == 2 && FNR > 1 {
 		bf_code, id, bf_genes, n_g_bf, t);
 
 
-	attribute = assemble_matches(ref_bf_code ref_af_code,
+	line = assemble_matches(ref_bf_code ref_af_code,
 		match_bf_bf, match_bf_af,
 		match_af_af, match_af_bf);
 
-	printf("%s\t%s\t%s\n", 
-		ref_id, 
-		ref_bf_code ref_af_code,
-		attribute);
+	print line;
 
 	delete ref_bf_genes; delete ref_af_genes;
 	ref_bf_genes[0] = ref_af_genes[0] = "";
