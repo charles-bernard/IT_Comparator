@@ -670,10 +670,10 @@ parallel -k homolo_build {1} {2} {3} {4} {5} {6} {7} {8} {9} \
 ##############################################################
 printf "STEP 02) Get Genomic Landscape Homology\n" | tee -a "$LOG";
 
-SCRIPT="$SCRIPT_PATH"/"Subscripts"/"05-get_homologuous_landscape.awk";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"05-get_homologous_landscape.awk";
 
 for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
-	IT_HOMOLO_LANDSCAPE[$i]="${IT_HOMOLO_DIR[$i]}"/"Genomic_landscape_homology"; 
+	IT_HOMOLO_LANDSCAPE[$i]="${IT_HOMOLO_DIR[$i]}"/"Genomic_landscape_homology.csv"; 
 	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
 	get_homolo_landscape "$SCRIPT" "${LANDSCAPE[$i]}" \
 		"$REF_LANDSCAPE" "${IT_HOMOLO_LANDSCAPE[$i]}" "$COMMAND";
