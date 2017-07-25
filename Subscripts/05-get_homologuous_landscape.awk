@@ -136,10 +136,8 @@ function initialize_vs_code(max_g, n, type, direction, break_event, t) {
 function find_match(max_g, contrary_series, type, 
 	ref_code, ref_id, ref_genes, ref_n, 
 	vs_code, vs_id, vs_genes, vs_n, t) {
-
-	match_tag = "";
-	match_code = "";
-
+	id_list = score_list = code_list = present_list = \
+	order_list = orientation_list = flipped_list = "";
 	k = 0;
 
 	if(ref_n > max_g) { ref_n = max_g; }
@@ -150,7 +148,7 @@ function find_match(max_g, contrary_series, type,
 		nb_g_ordered = 0;
 		nb_g_oriented = 0;
 
-		code_string = vs_code[cur_t];
+		cur_code_string = vs_code[cur_t];
 
 		if(vs_n[cur_t] > max_g) { vs_n[cur_t] = max_g; }
 
@@ -179,7 +177,7 @@ function find_match(max_g, contrary_series, type,
 						nb_g_ordered++;
 					}
 					
-					cur_char = substr(code_string, j+2, 1);
+					cur_char = substr(cur_code_string, j+2, 1);
 					if(cur_char ~ /[A-Z]/) {
 						cur_char = code[type][ref_idx];
 						if(ref_char ~ /[A-Z]/) {
@@ -192,33 +190,152 @@ function find_match(max_g, contrary_series, type,
 						} 
 					}
 
-					code_string = substr(code_string, 1, j+1) \
-						cur_char substr(code_string, j+3);
+					cur_code_string = substr(cur_code_string, 1, j+1) \
+						cur_char substr(cur_code_string, j+3);
 				}
 			}
 		}
 
-		if(contrary_series) {
-			code_string = convert_to_contrary_series(code_string);
-		}
-
 		if(nb_g_present) {
-			score = ";(P=" nb_g_present "/" ref_n \
-					",O=" nb_g_ordered "/" ref_n \
-					",D=" nb_g_oriented "/" ref_n ")";
-			if(k == 0) {
-				match_tag = vs_id[cur_t] score;
-				match_code = code_string;
+			
+			if(contrary_series) {
+				cur_code_string = convert_to_contrary_series(cur_code_string);
+				cur_is_flipped = "TRUE";
 			} else {
-				match_tag = match_tag "|" vs_id[cur_t] score;
-				match_code = match_code "|" code_string;
+				cur_is_flipped = "FALSE";
+			}
+
+			if(k == 0) {
+				id_list = id[cur_t];
+				score_list = "(P=" nb_g_present "/" ref_n \
+					",O=" nb_g_ordered "/" ref_n \
+					",D=" nb_g_oriented "/" ref_n ")";;
+				code_list = cur_code_string;
+				present_list = nb_g_present / ref_n;
+				order_list = nb_g_ordered / ref_n;
+				orientation_list = nb_g_oriented / ref_n;
+				flipped_list = cur_is_flipped;
+			} else {
+				id_list = id_list ";" id[cur_t];
+				score_list = score_list ";(P=" nb_g_present "/" ref_n \
+					",O=" nb_g_ordered "/" ref_n \
+					",D=" nb_g_oriented "/" ref_n ")";;
+				code_list = code_list ";" cur_code_string;
+				present_list = present_list ";" nb_g_present / ref_n;
+				order_list = order_list ";" nb_g_ordered / ref_n;
+				orientation_list = orientation_list ";" nb_g_oriented / ref_n;
+				flipped_list = flipped_list ";" cur_is_flipped;
 			}
 			k++;
 		}
 		
 	}
-	return match_tag "\t" match_code;
+	if(id_list) {
+		return id_list "|" flipped_list "|" code_list "|" score_list \
+			"|" present_list "|" order_list "|" orientation_list;
+	}
+	return "";
 }
+
+function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
+	  i,  j,  k) {
+	matches_array[0] = bf_bf; matches_array[1] = bf_af;
+	matches_array[2] = af_af; matches_array[3] = af_bf;
+
+	i_bf_bf = 0; i_bf_af = 1; i_af_af = 2; i_af_bf = 3;
+
+	j_id = 0; j_flip = 1; j_code = 2; j_score = 3;
+	j_present = 4; j_order = 5; j_orientation = 6;
+
+	# get attributes of each IT
+	for(i = 0; i < 4; i++) {
+		natts = split(matches_array[i], matches_attributes, "|");
+		for(j = 0; j < natts; j++) {
+			ntags[i] = split(matches_attributes[j+1], tmp_tags, ";");
+			for(k = 0; k < ntags[i]; k++) {
+				tag[i][j][k] = tmp_tags[k+1];
+			}
+			delete tmp_tags;
+		}
+		delete matches_attributes;
+	}
+	delete matches_array;
+
+	# see if context is preserved on both side of the IT
+	for(kA = 0; kA < ntags[i_bf_bf]; kA++) {
+		cur_a_id = tag[i_bf_bf][j_id][kA];
+		k_other_side[cur_a_id] = "";
+		for(kB = 0; kB < ntags[i_af_af]; kB++) {
+			cur_b_id = tag[i_af_af][j_id][kB]
+			if(cur_a_id == cur_b_id) {
+				k_other_side[cur_a_id] = kB;
+			}
+		}
+	}
+	for(kA = 0; kA < ntags[i_bf_af]; kA++) {
+		cur_a_id = tag[i_bf_af][j_id][kA];
+		k_other_side[cur_a_id] = "";
+		for(kB = 0; kB < ntags[i_af_bf]; kB++) {
+			cur_b_id = tag[i_af_bf][j_id][kB]
+			if(cur_a_id == cur_b_id) {
+				k_other_side[cur_a_id] = kB;
+			}
+		}
+	}
+
+	# Build final tags
+	attribute = "";
+	for(i = 0; i < 4; i++) {
+		for(k = 0; k < ntags[i]; k++) {
+			cur_id = tag[i][j_id][k];
+			id_tag = flipped_tag = "";
+			bf_code_ = bf_score = bf_present = bf_order = bf_orientation = "";
+			af_code_ = af_score = af_present = af_order = af_orientation = "";
+			if(!already_visited[cur_id]) {
+				id_tag = "ID=" cur_id;
+				flipped_tag = ";Flipped=" tag[i][j_flip][k];
+				if(i == 0 || i == 1) {
+					bf_code_ = ";Bf-code=" tag[i][j_code][k];
+					bf_score = ";Bf-Score=" tag[i][j_score][k];
+					bf_present = ";Bf-NgPresent/totNg=" tag[i][j_present][k];
+					bf_order = ";Bf-NgOrdered/totNg=" tag[i][j_order][k];
+					bf_orientation = ";Bf-NgOriented/totNg=" tag[i][j_orientation][k];
+					if(k_other_side[cur_id]) {
+						if(i == 0) { i_other_side = 2; } else { i_other_side = 3; }
+						af_code_ = ";Af-code=" tag[i_other_side][j_code][k_other_side[cur_id]];
+						af_score = ";Af-Score=" tag[i_other_side][j_score][k_other_side[cur_id]];
+						af_present = ";Af-NgPresent/totNg=" tag[i_other_side][j_present][k_other_side[cur_id]];
+						af_order = ";Af-NgOrdered/totNg=" tag[i_other_side][j_order][k_other_side[cur_id]];
+						af_orientation = ";Af-NgOriented/totNg=" tag[i_other_side][j_orientation][k_other_side[cur_id]];
+					}
+				} else if(i == 2 || i == 3) {
+					af_code_ = ";Af-code=" tag[i][j_code][k];
+					af_score = ";Af-Score=" tag[i][j_score][k];
+					af_present = ";Af-NgPresent/totNg=" tag[i][j_present][k];
+					af_order = ";Af-NgOrdered/totNg=" tag[i][j_order][k];
+					af_orientation = ";Af-NgOriented/totNg=" tag[i][j_orientation][k];
+				}
+			}
+			already_visited[cur_id] = 1;
+			cur_attribute = id_tag flipped_tag \
+				bf_code_ af_code_ \
+				bf_score af_score \
+				bf_present bf_order bf_orientation \
+				af_present af_order af_orientation;
+			if(!attribute) {
+				attribute = cur_attribute;
+			} else if(cur_attribute) {
+				attribute = attribute "|" cur_attribute;
+			}
+		}
+	}
+	delete k_other_side; 
+	delete tag;
+	delete ntags;
+	delete already_visited;
+	return attribute;
+}
+
 
 BEGIN {
 	FS = "\t";
@@ -232,14 +349,7 @@ BEGIN {
 
 	header = "ref_ID" \
 		"\tref_code" \
-		"\tBEFORE-vs-BEFORE_vsID_match" \
-		"\tBEFORE-vs-BEFORE_vsID_match_code" \
-		"\tBEFORE-vs-AFTER_vsID_match" \
-		"\tBEFORE-vs-AFTER_vsID_match_code" \
-		"\tAFTER-vs-AFTER_vsID_match" \
-		"\tAFTER-vs-AFTER_vsID_match_code" \
-		"\tAFTER-vs-BEFORE_vsID_match" \
-		"\tAFTER-vs-BEFORE_vsID_match_code";
+		"\tvs_attributes"
 	printf("%s\n", header);
 
 	max_g = 5;
@@ -345,29 +455,30 @@ file_idx == 2 && FNR > 1 {
 		"af", ref_af_direction, ref_af_break_event);
 
 	## FIND MATCHES ##
-	match_bf_bf_fields = find_match(max_g, 0, "bf", 
+	match_bf_bf = find_match(max_g, 0, "bf", 
 		ref_bf_code, ref_id, ref_bf_genes, ref_n_g_bf, 
 		bf_code, id, bf_genes, n_g_bf, t);
 
-	match_bf_af_fields = find_match(max_g, 1, "bf", 
+	match_bf_af = find_match(max_g, 1, "bf", 
 		ref_bf_code, ref_id, ref_bf_genes, ref_n_g_bf, 
 		af_code, id, af_genes, n_g_af, t);
 
-	match_af_af_fields = find_match(max_g, 0, "af",
+	match_af_af = find_match(max_g, 0, "af",
 		ref_af_code, ref_id, ref_af_genes, ref_n_g_af, 
 		af_code, id, af_genes, n_g_af, t);
 
-	match_af_bf_fields = find_match(max_g, 1, "af", 
+	match_af_bf = find_match(max_g, 1, "af", 
 		ref_af_code, ref_id, ref_af_genes, ref_n_g_af, 
 		bf_code, id, bf_genes, n_g_bf, t);
+
+	attribute = assemble_matches(ref_bf_code ref_af_code,
+		match_bf_bf, match_bf_af,
+		match_af_af, match_af_bf);
 	
-	printf("%s\t%s\t%s\t%s\t%s\t%s\n", 
+	printf("%s\t%s\t%s\n", 
 		ref_id, 
 		ref_bf_code ref_af_code,
-		match_bf_bf_fields,
-		match_bf_af_fields,
-		match_af_af_fields,
-		match_af_bf_fields);
+		attribute);
 
 	delete ref_bf_genes; delete ref_af_genes;
 	ref_bf_genes[0] = ref_af_genes[0] = "";
