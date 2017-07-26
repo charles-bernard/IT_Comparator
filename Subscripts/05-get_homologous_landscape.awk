@@ -15,7 +15,7 @@ function get_gene_name(attribute) {
 
 function get_break_event(attribute) {
 	# Read break event from break_tag
-	match(attribute, /^cause[= ]+"*[a-zA-Z0-9?.+:_-]+[ "]*;/, break_tag);
+	match(attribute, /^cause[= ]+"*[a-zA-Z0-9?.+:_-]+[ ";]*/, break_tag);
 	gsub(/cause[= ]+"*/, "", break_tag[0]);
 	gsub(/[ "]*;$/, "", break_tag[0]);
 	break_event = break_tag[0];
@@ -391,12 +391,15 @@ BEGIN {
 	code["af"][3] = "W";
 	code["af"][4] = "V";
 
+	# Break events
 	code["bf"]["Opposite_gene"] = "K";
 	code["af"]["Opposite_gene"] = "Q";
-
 	code["bf"][max_g] = code["af"][max_g] = ".";
-
 	code["bf"]["IT"] = code["af"]["IT"] = ":";
+	code["bf"]["First_gene_from_ori"] = code["af"]["First_gene_from_ori"] = "O";
+	code["bf"]["Last_gene_from_ori"] = code["af"]["Last_gene_from_ori"] = "O";
+	code["bf"][""] = code["af"][""] = "?";
+
 	code["bf"]["mainIT"] = code["af"]["mainIT"] = "!";
 
 	mismatch_homolog = "H";
@@ -413,11 +416,11 @@ BEGIN {
 
 	# Example:
 	# Reference Code:
-	# :BA!vwxQ
-	# (IT!)-[ B }-[ A }-(IT!)-[ v }-[ w }-[ x }-{ Q ]
+	# :BA!zyxQ
+	# (IT!)-[ B }-[ A }-(IT!)-[ z }-[ y }-[ x }-{ Q ]
 	# Vs code:
-	# kHB!vwhX
-	# { k ]-[ H }-[ B }-(IT!)-[ v }-[ w }-[ h }-{ X ]
+	# kHB!zyhX
+	# { k ]-[ H }-[ B }-(IT!)-[ z }-[ y }-[ h }-{ Q ]
 
 	header = "Ref. ID" \
 		"\tRef. Code" \
@@ -517,7 +520,7 @@ file_idx == 2 && FNR > 1 {
 		match_bf_bf, match_bf_af,
 		match_af_af, match_af_bf);
 
-	print line;
+	printf("%s\n", line);
 
 	delete ref_bf_genes; delete ref_af_genes;
 	ref_bf_genes[0] = ref_af_genes[0] = "";
