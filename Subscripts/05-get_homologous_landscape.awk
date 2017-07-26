@@ -4,6 +4,7 @@
 # I will try to rearrange it soon ;).
 
 function get_gene_name(attribute) {
+	# Read gene name from gene_tag
 	match(attribute, /^gene_name[= ]+"*[a-zA-Z0-9?.+:_-]+[ "]*;/, gene_tag);
 	gsub(/gene_name[= ]+"*/, "", gene_tag[0]);
 	gsub(/[ "]*;$/, "", gene_tag[0]);
@@ -13,6 +14,7 @@ function get_gene_name(attribute) {
 }
 
 function get_break_event(attribute) {
+	# Read break event from break_tag
 	match(attribute, /^cause[= ]+"*[a-zA-Z0-9?.+:_-]+[ "]*;/, break_tag);
 	gsub(/cause[= ]+"*/, "", break_tag[0]);
 	gsub(/[ "]*;$/, "", break_tag[0]);
@@ -22,17 +24,21 @@ function get_break_event(attribute) {
 }
 
 function series_to_gene_array(max_g, n, series, type, t) {
+	# This function takes a list of genes attributes stored in a single 
+	# string format ('series') and fills an array of gene names from it
 	if(n > max_g) { limit = max_g; } else { limit = n; }
 	split(series, gene_attribute, "|");
 
 	for(i = 1; i <= limit; i++) {
 		if(type == "bf") {
+			# Last gene of the string is the first before IT
 			if(file_idx == 1) {
 				bf_genes[t][i-1] = get_gene_name(gene_attribute[n+1-i]);
 			} else {
 				ref_bf_genes[i-1] = get_gene_name(gene_attribute[n+1-i]);
 			}
 		} else if(type == "af") {
+			# First gene of the string is the first after IT
 			if(file_idx == 1) {
 				af_genes[t][i-1] = get_gene_name(gene_attribute[i]);
 			} else {
@@ -43,23 +49,20 @@ function series_to_gene_array(max_g, n, series, type, t) {
 	delete gene_attribute;
 }
 
-function convert_to_contrary_series(string,  char) {
-	len = length(string);
-	contrary = "";
-	for(i = 1; i <= len; i++) {
-		if(i == 1) {
-			char = substr(string, len, 1);
-		} else if(i == len) {
-			char = substr(string, 1, 1);
-		} else {
-			char = substr(string, i, 1);
-		}
-		contrary = contrary char;
-	}
-	return contrary;
+function convert_to_contrary_series(code_str,  char) {
+	# To flip a code, the letters at the extremities
+	# are just inverted.
+	len = length(code_str);
+	first_char = substr(code_str, len, 1);
+	last_char = substr(code_str, 1, 1);
+	core = substr(code_str, 2, len-2);
+	return first_char core last_char;
 }
 
 function build_reference_code(max_g, n, type, direction, break_event) {
+	# This function takes an array of gene (either before or after IT)
+	# And assign a code letter to each of its genes according 
+	# to their position from IT. 
 	if(n > max_g) {
 		break_event = max_g;
 	}
@@ -76,12 +79,16 @@ function build_reference_code(max_g, n, type, direction, break_event) {
 		i++;
 	}
 
+	# If a gene points towards an IT, then the code letter is an upper case,
+	# a lower case otherwise. 
 	if(direction == "opposite") {
 		code_string = tolower(code_string);
 	} else if(break_event == "Opposite_gene") {
 		break_char = tolower(break_char);
 	}
 
+	# Eventually, the break event code letter, as well as the terminator
+	# code letter are concatenated at the extremities of the code string.
 	if(type == "bf") {
 		code_string = break_char code_string code[type]["mainIT"];
 	} else {
@@ -92,7 +99,10 @@ function build_reference_code(max_g, n, type, direction, break_event) {
 }
 
 function initialize_vs_code(max_g, n, type, direction, break_event, t) {
-	if(n > max_g) {
+	# Behave the same as the 'build_reference_code' function but instead
+	# of assigning a unique code letter to each gene, tells just weither
+	# the genes have a referenced homologous (code 'H') or not ('N')
+ 	if(n > max_g) {
 		break_event = max_g;
 	}
 	break_char = code[type][break_event];
@@ -136,6 +146,15 @@ function initialize_vs_code(max_g, n, type, direction, break_event, t) {
 function find_match(max_g, contrary_series, type, 
 	ref_code, ref_id, ref_genes, ref_n, 
 	vs_code, vs_id, vs_genes, vs_n, t) {
+	# This function compare a "reference" list of genes against each and every
+	# "vs" list of genes. Lists are stored as arrays of gene names whose indexes
+	# correspond to the position of the gene from the IT. 
+	# If a gene name in the current "vs list" matches one of the genes in the 
+	# reference list, the 'vs code' is updated, via substitution of each letter 
+	# 'H' by the corresponding gene's code letter in the 'reference code'.
+	# Scores based on number of genes present, well ordered and well oriented in
+	# each matching 'vs list' are also computed. 
+
 	id_list = score_list = code_list = present_list = \
 	order_list = orientation_list = flipped_list = "";
 	k = 0;
@@ -147,6 +166,7 @@ function find_match(max_g, contrary_series, type,
 		nb_g_present = 0;
 		nb_g_ordered = 0;
 		nb_g_oriented = 0;
+		same_adjacent_gene = 0;
 
 		cur_code_string = vs_code[cur_t];
 
@@ -190,6 +210,10 @@ function find_match(max_g, contrary_series, type,
 						} 
 					}
 
+					if(ref_idx == 0 && idx == 0) {
+						same_adjacent_gene = 1;
+					}
+
 					cur_code_string = substr(cur_code_string, 1, j+1) \
 						cur_char substr(cur_code_string, j+3);
 				}
@@ -214,6 +238,7 @@ function find_match(max_g, contrary_series, type,
 				present_list = nb_g_present / ref_n;
 				order_list = nb_g_ordered / ref_n;
 				orientation_list = nb_g_oriented / ref_n;
+				adjacent_list = same_adjacent_gene;
 				flipped_list = cur_is_flipped;
 			} else {
 				id_list = id_list ";" id[cur_t];
@@ -224,6 +249,7 @@ function find_match(max_g, contrary_series, type,
 				present_list = present_list ";" nb_g_present / ref_n;
 				order_list = order_list ";" nb_g_ordered / ref_n;
 				orientation_list = orientation_list ";" nb_g_oriented / ref_n;
+				adjacent_list = adjacent_list ";" same_adjacent_gene
 				flipped_list = flipped_list ";" cur_is_flipped;
 			}
 			k++;
@@ -232,7 +258,7 @@ function find_match(max_g, contrary_series, type,
 	}
 	if(id_list) {
 		return id_list "|" flipped_list "|" code_list "|" score_list \
-			"|" present_list "|" order_list "|" orientation_list;
+			"|" present_list "|" order_list "|" orientation_list "|" adjacent_list;
 	}
 	return "";
 }
@@ -245,7 +271,7 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 	i_bf_bf = 0; i_bf_af = 1; i_af_af = 2; i_af_bf = 3;
 
 	j_id = 0; j_flip = 1; j_code = 2; j_score = 3;
-	j_present = 4; j_order = 5; j_orientation = 6;
+	j_present = 4; j_order = 5; j_orientation = 6; j_adjacent = 7;
 
 	# get attributes of each IT
 	for(i = 0; i < 4; i++) {
@@ -300,6 +326,7 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 					bf_present = tag[i][j_present][k];
 					bf_order = tag[i][j_order][k];
 					bf_orientation = tag[i][j_orientation][k];
+					bf_adjacent = tag[i][j_adjacent][k];
 					if(k_other_side[cur_id] != "") {
 						if(i == 0) { i_other_side = 2; } else { i_other_side = 3; }
 						af_code_ = tag[i_other_side][j_code][k_other_side[cur_id]];
@@ -307,6 +334,7 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 						af_present = tag[i_other_side][j_present][k_other_side[cur_id]];
 						af_order = tag[i_other_side][j_order][k_other_side[cur_id]];
 						af_orientation = tag[i_other_side][j_orientation][k_other_side[cur_id]];
+						af_adjacent = tag[i_other_side][j_adjacent][k_other_side[cur_id]];
 					}
 				} else if(i == 2 || i == 3) {
 					af_code_ = tag[i][j_code][k];
@@ -314,14 +342,15 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 					af_present = tag[i][j_present][k];
 					af_order = tag[i][j_order][k];
 					af_orientation = tag[i][j_orientation][k];
+					af_adjacent = tag[i][j_adjacent][k];
 				}
 			}
 			already_visited[cur_id] = 1;
 
 			cur_line = ref_id "\t" ref_bf_code ref_af_code "\t" \
 				id_ "\t" flip "\t" bf_code_ "\t" af_code_ "\t" bf_score "\t" af_score "\t" \
-				bf_present "\t" bf_order "\t" bf_orientation "\t" \
-				af_present "\t" af_order "\t" af_orientation;
+				bf_present "\t" bf_order "\t" bf_orientation "\t" bf_adjacent "\t" \
+				af_present "\t" af_order "\t" af_orientation "\t" af_adjacent;
 			if(!line && id_) {
 				line = cur_line;
 			} else if(id_) {
@@ -336,7 +365,7 @@ function assemble_matches(ref_code, bf_bf, bf_af, af_af, af_bf,
 	if(line) {
 		return line;
 	}
-	return ref_id "\t" ref_bf_code ref_af_code "\t\t\t\t\t\t\t\t\t\t\t\t"
+	return ref_id "\t" ref_bf_code ref_af_code "\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 }
 
 
@@ -346,22 +375,6 @@ BEGIN {
 
 	# counter for IT
 	t = 0;
-
-	header = "Ref. ID" \
-		"\tRef. Code" \
-		"\tVs ID" \
-		"\tis Vs Flipped?" \
-		"\tVs Bf Code" \
-		"\tVs Af Code" \
-		"\tVs Bf Score" \
-		"\tVs Af Score" \
-		"\tVs Bf NgPresent/totNg" \
-		"\tVs Bf NgOrdered/totNg" \
-		"\tVs Bf NgOriented/totNg" \
-		"\tVs Af NgPresent/totNg" \
-		"\tVs Af NgOrdered/totNg" \
-		"\tVs Af NgOriented/totNg";
-	printf("%s\n", header);
 
 	max_g = 5;
 
@@ -406,6 +419,23 @@ BEGIN {
 	# kHB!vwhX
 	# { k ]-[ H }-[ B }-(IT!)-[ v }-[ w }-[ h }-{ X ]
 
+	header = "Ref. ID" \
+		"\tRef. Code" \
+		"\tVs ID" \
+		"\tis Vs Flipped?" \
+		"\tVs Bf Code" \
+		"\tVs Af Code" \
+		"\tVs Bf Score" \
+		"\tVs Af Score" \
+		"\tVs Bf NgPresent/totNg" \
+		"\tVs Bf NgOrdered/totNg" \
+		"\tVs Bf NgOriented/totNg" \
+		"\tVs Bf Adjacent_is" code["bf"][0] \
+		"\tVs Af NgPresent/totNg" \
+		"\tVs Af NgOrdered/totNg" \
+		"\tVs Af NgOriented/totNg" \
+		"\tVs Bf Adjacent_is" code["af"][0];
+	printf("%s\n", header);
 }
 
 FNR == 1 {
