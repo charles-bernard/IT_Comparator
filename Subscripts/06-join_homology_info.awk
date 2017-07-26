@@ -36,7 +36,7 @@ file_idx == 3 && FNR == 1 {
 
 file_idx == 3 && FNR > 1 {
 	prefix = $0;
-	sum_score = $9 + $10 + $11 + $12 + $13 + $14;
+	sum_score = $9 + $10 + $11 + $12 + $13 + $14 + $15 + $16;
 
 	is_seq_hom = seq[$1][$3]; 
 	cur_seq_score = seq_score[$1][$3]; 
