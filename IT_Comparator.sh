@@ -347,6 +347,27 @@ function join_homolo_info {
 }
 
 ###########################################################
+###### I.11 Align all possible homolgous ##################
+###########################################################
+function align_all_homologous {
+	# ARGS
+	local SCRIPT="$1"; local ALIGNER="$2";
+	local REF_SEQ="$3"; local VS_SEQ="$4";
+	local INIT_INFO="$5"; local UPDATED_INFO="$6";
+	local COMMAND="$6";
+
+	(set -x;
+		awk -v aligner="$ALIGNER" -f "$SCRIPT" \
+		"$REF_SEQ" "$VS_SEQ" "$INIT_INFO" \
+		> "$UPDATED_INFO" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
 # II. PARAMETERS FOR THE PIPELINE
 ###########################################################
 ###### II.1 Read Options ##################################
@@ -706,9 +727,23 @@ printf "STEP 03) Cross-check info on IT homology\n" | tee -a "$LOG";
 SCRIPT="$SCRIPT_PATH"/"Subscripts"/"06-join_homology_info.awk";
 
 for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
-	IT_HOMOLO_JOIN[$i]="${IT_HOMOLO_DIR[$i]}"/"Joined_homology_info.csv"; 
+	IT_HOMOLO_JOIN[$i]="${IT_HOMOLO_DIR[$i]}"/"Joined_homology_info_tmp.csv"; 
 	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
 	join_homolo_info "$SCRIPT" "${IT_HOMOLO_SEQ[$i]}" \
 		"${IT_HOMOLO_STRUCT[$i]}" "${IT_HOMOLO_LANDSCAPE[$i]}" \
 		"${IT_HOMOLO_JOIN[$i]}" "$COMMAND";
+done
+
+##############################################################
+###### Align all possible homologous #########################
+##############################################################
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"07_align_all_possible_homologous.awk";
+ALIGNER_PATH="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"basic_aligner";
+
+for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
+	UPDATED_JOIN[$i]="${IT_HOMOLO_DIR[$i]}"/"Joined_homology_info.csv";
+	align_all_homologous "$SCRIPT" "$ALIGNER_PATH" \
+		"$REF_IT_SEQ" "${IT_SEQ[$i]}" \
+		"${IT_HOMOLO_JOIN[i]}" "${UPDATED_JOIN[$i]}" "$COMMAND";
+	rm "${IT_HOMOLO_JOIN[$i]}";
 done
