@@ -368,6 +368,24 @@ function align_all_homologous {
 }
 
 ###########################################################
+###### I.11 Align all possible homolgous ##################
+###########################################################
+function assign_unique_homologous {
+	# Args
+	local SCRIPT="$1"; local INFILE="$2";
+	local OUTFILE="$3"; local COMMAND="$4";
+
+	(set -x;
+		awk -f "$SCRIPT" "$INFILE" \
+		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
 # II. PARAMETERS FOR THE PIPELINE
 ###########################################################
 ###### II.1 Read Options ##################################
@@ -737,7 +755,7 @@ done
 ##############################################################
 ###### Align all possible homologous #########################
 ##############################################################
-SCRIPT="$SCRIPT_PATH"/"Subscripts"/"07_align_all_possible_homologous.awk";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"07-align_all_possible_homologous.awk";
 ALIGNER_PATH="$SCRIPT_PATH"/"Subscripts"/"HomoloBuild"/"basic_aligner";
 
 for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
@@ -746,4 +764,17 @@ for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
 		"$REF_IT_SEQ" "${IT_SEQ[$i]}" \
 		"${IT_HOMOLO_JOIN[i]}" "${UPDATED_JOIN[$i]}" "$COMMAND";
 	rm "${IT_HOMOLO_JOIN[$i]}";
+done
+
+##############################################################
+###### Assign to each ref IT an unique homologous ############
+##############################################################
+printf "STEP 04) Assign to each reference IT an unique homologous\n" | tee -a "$LOG";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"08-assign_unique_homologous.awk";
+
+for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
+	FINAL_HOMOLO_LIST[$i]="${IT_HOMOLO_DIR[$i]}"/"Final_list_of_homologous_ITs.csv";
+	printf "\t* ""${SPECIES_NAME[$i]}""\n" | tee -a "$LOG";
+	assign_unique_homologous "$SCRIPT" "${UPDATED_JOIN[$i]}" \
+		"${FINAL_HOMOLO_LIST[$i]}" "$COMMAND";
 done
