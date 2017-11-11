@@ -368,7 +368,7 @@ function align_all_homologous {
 }
 
 ###########################################################
-###### I.11 Align all possible homolgous ##################
+###### I.12 Assign Unique homologous ######################
 ###########################################################
 function assign_unique_homologous {
 	# Args
@@ -378,6 +378,27 @@ function assign_unique_homologous {
 	(set -x;
 		awk -f "$SCRIPT" "$INFILE" \
 		> "$OUTFILE" 2>"$TMP_TOOL_STDERR";
+	) 2>> "$COMMAND";
+	printf "\n" >> "$COMMAND";
+
+	# Exit if stderr_file not empty
+	check_tool_stderr "$TMP_TOOL_STDERR" "$(basename "$SCRIPT")" "$LOG";
+}
+
+###########################################################
+###### I.13 Summarize IT Homology Info ####################
+###########################################################
+function summarize {
+	# Args
+	local SCRIPT="$1"; local LIST_SPECIES="$2";
+	local IT_FILE="$3"; local CODE_FILE="$4";
+	local COMMAND="$5";
+
+	(set -x;
+		awk -v list_species="$LIST_SPECIES" \
+		-v it_file="$IT_FILE" -v code_file="$CODE_FILE" \
+		-f "$SCRIPT" "${FINAL_HOMOLO_LIST[@]}";
+		2>"$TMP_TOOL_STDERR";
 	) 2>> "$COMMAND";
 	printf "\n" >> "$COMMAND";
 
@@ -462,6 +483,7 @@ done
 NB_SPECIES=$s;
 
 check_outdir "$OUTPUT_DIR"; 
+ALL_STEPS_DIR="$OUTPUT_DIR"/"All_steps"; mkdir -p;
 
 check_log "$LOG"; > "$LOG";
 COMMAND="$OUTPUT_DIR"/"commands.log"; > "$COMMAND";
@@ -489,10 +511,10 @@ done
 ##########################################################
 ###### III.1 Create outdirs ##############################
 ##########################################################
-REF_OUTDIR="$OUTPUT_DIR"/"Reference";
+REF_OUTDIR="$ALL_STEPS_DIR"/"Reference";
 mkdir -p "$REF_OUTDIR";
 for (( i=0; i<${#SPECIES_NAME[@]}; i++ )) do
-	SPECIES_OUTDIR[$i]="$OUTPUT_DIR"/"${SPECIES_NAME[$i]}";
+	SPECIES_OUTDIR[$i]="$ALL_STEPS_DIR"/"${SPECIES_NAME[$i]}";
 	mkdir -p "${SPECIES_OUTDIR[$i]}";
 done
 
@@ -621,8 +643,8 @@ for (( i=0; i<${#HOMOLO_OUTDIR[@]}; i++ )); do
 	done
 done
 
-mkdir -p "$OUTPUT_DIR"/"Gene_homology_table"
-HOMOLO_TAB="$OUTPUT_DIR"/"Gene_homology_table"/"Homology_table.csv";
+mkdir -p "$ALL_STEPS_DIR"/"Gene_homology_table"
+HOMOLO_TAB="$ALL_STEPS_DIR"/"Gene_homology_table"/"Homology_table.csv";
 TMP=$(mktemp);
 # Concatenate columns
 pr -mts "${CONC_FILE[@]}" > "$TMP";
@@ -630,6 +652,8 @@ pr -mts "${CONC_FILE[@]}" > "$TMP";
 head -1 "$TMP" > "$HOMOLO_TAB"; 
 tail -n +2 "$TMP" | sort -k1 -n >> "$HOMOLO_TAB";
 rm "$TMP";
+
+cp "$HOMOLO_TAB" "$OUTPUT_DIR"/"GENE_HOMOLOGY_TABLE.csv";
 
 ##########################################################
 # Modify Species Annotation according to Reference Names #
@@ -778,3 +802,21 @@ for (( i=0; i<${#IT_HOMOLO_DIR[@]}; i++ )); do
 	assign_unique_homologous "$SCRIPT" "${UPDATED_JOIN[$i]}" \
 		"${FINAL_HOMOLO_LIST[$i]}" "$COMMAND";
 done
+
+##############################################################
+###### GATHER ALL THESE HOMOLOGOUS INTO A SUMMARY FILE #######
+##############################################################
+printf "STEP 05) Print a summary about IT homology\n" | tee -a "$LOG";
+SCRIPT="$SCRIPT_PATH"/"Subscripts"/"09-summarize_homology_info.awk";
+
+SPECIES_LIST="$REF_SPECIES";
+for (( i=0; i<${#SPECIES_NAME[@]}; i++ )); do
+	SPECIES_LIST="$SPECIES_LIST"";""${SPECIES_NAME[$i]}";
+done
+IT_SUMMARY="$OUTPUT_DIR"/"IT_HOMOLOGY_TABLE.csv";
+CONTEXT_SUMMARY="$OUTPUT_DIR"/"CONTEXT_OF_ITs.csv";
+
+summarize "$SCRIPT" "$SPECIES_LIST" "$IT_SUMMARY" \
+	"$CONTEXT_SUMMARY" "$COMMAND";
+
+rm "$TMP_TOOL_STDERR";
